@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Footer</title>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 <!-- Custom CSS for hover animation -->
 <style>
 html, body {
@@ -56,7 +57,7 @@ form button {
 <body>
 
 	<!-- AOS CSS -->
-	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+	
 
 	<footer class="bg-dark text-light pt-5 mt-auto">
 		<div class="container">

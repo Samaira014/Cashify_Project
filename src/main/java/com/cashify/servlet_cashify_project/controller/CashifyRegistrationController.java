@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 @WebServlet(value="/register")
-public class CashifyController extends HttpServlet {
+public class CashifyRegistrationController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

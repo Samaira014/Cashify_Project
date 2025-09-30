@@ -8,6 +8,10 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+
+<%
+	String message = (String) request.getAttribute("msg");
+%>
 <jsp:include page="header.jsp"></jsp:include>
 
 <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
@@ -19,6 +23,11 @@
 
           <!-- Login Form -->
           <form action="login" method="post">
+          
+          <%if(message != null){ %>
+          <h5 style="color: red;"><%=message%></h5>
+          <%} %>
+          
             
             <!-- Email -->
             <div class="mb-3">

@@ -1,15 +1,17 @@
-
 package com.cashify.servlet_cashify_project.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import com.cashify.servlet_cashify_project.connection.CashifyConnection;
+import com.cashify.servlet_cashify_project.dto.Admin;
 import com.cashify.servlet_cashify_project.dto.User;
 
 public class UserDao {
 
-	Connection conn = CashifyConnection.getCashifyConnection();
+	Connection connection = CashifyConnection.getCashifyConnection();
 
 	public User saveUserDao(User user) {
 		String insertInto = "INSERT INTO user(id, name, email, password, phone) VALUES (?, ?, ?, ?, ?)";
@@ -17,7 +19,7 @@ public class UserDao {
 		try {
 
 			// 3. Prepare the SQL statement
-			PreparedStatement ps = conn.prepareStatement(insertInto);
+			PreparedStatement ps = connection.prepareStatement(insertInto);
 
 			// 4. Set parameters from the User object
 			ps.setInt(1, user.getId());
@@ -36,12 +38,39 @@ public class UserDao {
 
 			// Close connection
 			ps.close();
-			conn.close();
+			connection.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return null; // return null if insert failed
+	}
+	
+	public User getUserByEmailDao(String userEmail) {
+
+		try {
+			String selectAdminQueryByEmail = "select * from user where email = ?";
+
+			PreparedStatement p = connection.prepareStatement(selectAdminQueryByEmail);
+			
+			p.setString(1, userEmail);
+			
+			ResultSet resultSet = p.executeQuery();
+			if (resultSet.next()) {
+
+				User user = new User();
+				user.setEmail(resultSet.getString("email"));
+				user.setPassword(resultSet.getString("password"));
+
+				return user;
+			}
+			return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			return null;
+		}
+
 	}
 }
