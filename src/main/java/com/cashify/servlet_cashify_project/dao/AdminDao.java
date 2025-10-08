@@ -38,4 +38,24 @@ public class AdminDao {
 		}
 
 	}
+	
+	 // ✅ Register (Insert new Admin)
+    public Admin saveAdmin(Admin admin) {
+        try {
+            String insertQuery = "INSERT INTO admin (id, email, password) VALUES (?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(insertQuery);
+
+            ps.setInt(1, admin.getId());
+            ps.setString(2, admin.getEmail());
+            ps.setString(3, admin.getPassword());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                return admin; // return saved object
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

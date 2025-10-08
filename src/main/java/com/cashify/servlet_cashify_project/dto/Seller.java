@@ -1,5 +1,7 @@
 package com.cashify.servlet_cashify_project.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ public class Seller {
 	private String email;
 	private String password;
 	private long phone;
+	private LocalDate joinedDate;
 	
 
 }

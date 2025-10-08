@@ -52,8 +52,7 @@
 
 .navbar-search input {
 	width: 100%;
-	max-width: 320px; /* expand a bit but not overlap */
-    
+	max-width: 320px;
 	padding: 0.5rem 1rem 0.5rem 2.8rem;
 	border-radius: 0.5rem;
 	border: 1px solid yellow;
@@ -77,7 +76,7 @@
 }
 
 /* Buttons */
-.btn-login, .btn-register {
+.btn-login, .btn-register, .btn-logout {
 	border-radius: 50px;
 	font-weight: 600;
 	padding: 0.35rem 1.2rem;
@@ -106,6 +105,18 @@
 .btn-register:hover {
 	background: #fff;
 	color: #28a745;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-logout {
+	background: #dc3545;
+	color: #fff;
+}
+
+.btn-logout:hover {
+	background: #fff;
+	color: #dc3545;
 	transform: translateY(-2px);
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -153,6 +164,12 @@
 }
 </style>
 </head>
+
+<%
+    String adminSession = (String) session.getAttribute("adminSession");
+    String userSession = (String) session.getAttribute("userSession");
+%>
+
 <body>
 
 	<!-- Top Navbar -->
@@ -160,45 +177,64 @@
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">💰 Cashify</a>
 
-			<!-- Navbar links in order -->
+			<!-- Navbar links -->
 			<ul class="navbar-nav me-2 mb-2 mb-lg-0 d-none d-lg-flex">
-				<li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+				<li class="nav-item"><a class="nav-link" href="home.jsp">Home</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-				<li class="nav-item dropdown"><a
-					class="nav-link dropdown-toggle" href="#" id="servicesDropdown"
-					role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
 					<ul class="dropdown-menu" aria-labelledby="servicesDropdown">
 						<li><a class="dropdown-item" href="#">Loan Plans</a></li>
 						<li><a class="dropdown-item" href="#">Investment</a></li>
 						<li><hr class="dropdown-divider"></li>
 						<li><a class="dropdown-item" href="#">Consulting</a></li>
-					</ul></li>
+					</ul>
+				</li>
 			</ul>
 
 			<!-- Search bar -->
 			<form class="navbar-search" action="search.jsp" method="get">
-				<i class="fa-solid fa-magnifying-glass"></i> <input type="text"
-					name="query" placeholder="Search..." required>
+				<i class="fa-solid fa-magnifying-glass"></i>
+				<input type="text" name="query" placeholder="Search..." required>
 			</form>
 
-			<!-- Login/Register buttons -->
+			<!-- Login/Register or Logout -->
 			<div class="d-flex ms-auto d-none d-lg-flex">
-				<a href="login.jsp" class="btn btn-login">Login</a> <a
-					href="registration.jsp" class="btn btn-register">Register</a>
+				<%
+					if (adminSession != null || userSession != null) {
+				%>
+					<a href="user-logout" class="btn btn-logout">Logout</a>
+				<%
+					} else {
+				%>
+					<a href="login.jsp" class="btn btn-login">Login</a>
+					<a href="registration.jsp" class="btn btn-register">Register</a>
+				<%
+					}
+				%>
 			</div>
 		</div>
 	</nav>
 
 	<!-- Bottom Navbar for mobile -->
 	<div class="mobile-nav d-lg-none">
-		<a href="#"><i class="fa-solid fa-house"></i>Home</a> <a href="#"><i
-			class="fa-solid fa-gear"></i>Features</a> <a href="#"><i
-			class="fa-solid fa-hand-holding-dollar"></i>Services</a> <a
-			href="login.jsp"><i class="fa-solid fa-right-to-bracket"></i>Login</a>
-		<a href="registration.jsp"><i class="fa-solid fa-user-plus"></i>Register</a>
+		<a href="#"><i class="fa-solid fa-house"></i>Home</a>
+		<a href="#"><i class="fa-solid fa-gear"></i>Features</a>
+		<a href="#"><i class="fa-solid fa-hand-holding-dollar"></i>Services</a>
+		<%
+			if (adminSession != null || userSession != null) {
+		%>
+			<a href="user-logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+		<%
+			} else {
+		%>
+			<a href="login.jsp"><i class="fa-solid fa-right-to-bracket"></i>Login</a>
+			<a href="registration.jsp"><i class="fa-solid fa-user-plus"></i>Register</a>
+		<%
+			}
+		%>
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

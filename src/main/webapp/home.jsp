@@ -312,22 +312,28 @@ height: 400px;
                 </div>
             </div>
             <div class="col-custom">
+             <a href="sell_phone.jsp" class="text-decoration-none">
                 <div class="device-card">
                     <img src="./images/sell-phone.jpg" alt="Sell Phone">
-                    <div class="device-title"> <a href="sell_phone.jsp" class="btn btn-success">Sell Phone</a></div>
-                </div>
+                    <div class="device-title">Sell Phone</div>
+                </div> 
+                </a>
             </div>
             <div class="col-custom">
+            <a href="gadgets.jsp" class="text-decoration-none">
                 <div class="device-card">
                     <img src="./images/gadgets.jpg" alt="Buy Gadgets">
                     <div class="device-title">Buy Gadgets</div>
                 </div>
+                </a>
             </div>
             <div class="col-custom">
+            <a href="phone-brand.jsp" class="text-decoration-none">
                 <div class="device-card">
                     <img src="./images/Apple-iPhone.jpg" alt="Buy Phone">
                     <div class="device-title">Buy Phone</div>
                 </div>
+                </a>
             </div>
             <div class="col-custom">
                 <div class="device-card">

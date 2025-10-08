@@ -1,5 +1,7 @@
 package com.cashify.servlet_cashify_project.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,9 @@ import lombok.NoArgsConstructor;
 public class Admin {
 	
 	private int id;
-	private String email;
-	private String password;
+    private String email;
+    private String password;
+   
 	
 
 }
