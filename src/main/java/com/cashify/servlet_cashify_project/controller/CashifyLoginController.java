@@ -3,9 +3,11 @@ package com.cashify.servlet_cashify_project.controller;
 import java.io.IOException;
 
 import com.cashify.servlet_cashify_project.dao.AdminDao;
+import com.cashify.servlet_cashify_project.dao.DeliveryPersonDao;
 import com.cashify.servlet_cashify_project.dao.SellerDao;
 import com.cashify.servlet_cashify_project.dao.UserDao;
 import com.cashify.servlet_cashify_project.dto.Admin;
+import com.cashify.servlet_cashify_project.dto.DeliveryPerson;
 import com.cashify.servlet_cashify_project.dto.Seller;
 import com.cashify.servlet_cashify_project.dto.User;
 
@@ -19,6 +21,11 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet(value = "/login")
 public class CashifyLoginController extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -29,23 +36,19 @@ public class CashifyLoginController extends HttpServlet {
 		String role = req.getParameter("role");
 
 		if (role.equalsIgnoreCase("admin")) {
+		    Admin admin = new AdminDao().getAdminByEmailDao(email);
 
-			Admin admin = new AdminDao().getAdminByEmailDao(email);
+		    if (admin != null && admin.getPassword().equals(password)) {
+		        // ✅ Store the full object
+		        httpSession.setAttribute("admin", admin);
+		        System.out.println("admin-logged in successfully");
 
-			if (admin != null && admin.getPassword().equals(password)) {
+		        resp.sendRedirect("admin-home.jsp"); // or forward
+		    } else {
+		        req.setAttribute("msg", "please check with your credentials");
+		        req.getRequestDispatcher("login.jsp").forward(req, resp);
+		    }
 
-				httpSession.setAttribute("adminSession", email);
-				System.out.println("admin-logged in successfully");
-
-				req.getRequestDispatcher("admin-home.jsp").forward(req, resp);
-
-			} else {
-
-				System.out.println("check with admin credentials!!!!");
-
-				req.setAttribute("msg", "please check with your credentials");
-				req.getRequestDispatcher("login.jsp").forward(req, resp);
-			}
 			
 		} else if (role.equalsIgnoreCase("seller")) {
 			Seller seller = new SellerDao().loginSeller(email, password);
@@ -59,7 +62,15 @@ public class CashifyLoginController extends HttpServlet {
 			    req.getRequestDispatcher("login.jsp").forward(req, resp);
 			}
 		} else if (role.equalsIgnoreCase("deliveryperson")) {
-
+		    // Fetch delivery person by email
+			DeliveryPerson dp = new DeliveryPersonDao().getByEmail(email);
+			if(dp != null && dp.getPassword().equals(password)) {
+			    httpSession.setAttribute("delivery", dp);
+			    resp.sendRedirect("delivery-home.jsp"); // Make sure this file exists
+			} else {
+			    req.setAttribute("msg", "Please check your credentials");
+			    req.getRequestDispatcher("login.jsp").forward(req, resp);
+			}
 		} else {
 
 			User user = new UserDao().getUserByEmailDao(email);

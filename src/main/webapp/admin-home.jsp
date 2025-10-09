@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
+<%@page import="com.cashify.servlet_cashify_project.dto.Admin"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,57 +15,53 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
-/* --- General Reset --- */
-body, html {
-	margin: 0;
-	padding: 0;
-	font-family: 'Segoe UI', sans-serif;
-}
-
 .main-wrapper {
-	display: flex;
-	min-height: 100vh;
-	background: #f4f6f9;
+	margin-top: -69px;
 }
-
+/* Fixed navbar height */
+.navbar-space {
+	height: 65px;
+}
+/* Sidebar */
 .sidebar {
 	width: 220px;
-	background: #343a40;
+	background: linear-gradient(180deg, #2f71a1, #6ecfde);
 	color: white;
-	flex-shrink: 0;
 	position: fixed;
-	top: 0;
+	top: 65px;
 	bottom: 0;
-	padding-top: 60px;
+	padding-top: 20px;
+	overflow-y: auto;
 	transition: all 0.3s;
+	z-index: 100;
 }
 
 .sidebar a {
-	display: block;
+	display: flex;
+	align-items: center;
 	color: white;
 	padding: 12px 20px;
 	text-decoration: none;
-	transition: 0.3s;
 	border-left: 4px solid transparent;
+	transition: all 0.3s;
+}
+
+.sidebar a i {
+	margin-right: 10px;
 }
 
 .sidebar a:hover, .sidebar a.active {
-	background: #495057;
-	border-left: 4px solid #0d6efd;
+	background-color: #30d5fb;
+	border-left: 4px solid #fff;
 	font-weight: 600;
 }
-
+/* Content */
 .content {
 	margin-left: 220px;
 	padding: 20px;
-	flex: 1;
+	margin-top: 65px;
 }
-
-.navbar-space {
-	height: 56px;
-} /* for fixed navbar */
-
-/* --- Stats Cards --- */
+/* Stats Cards */
 .stats {
 	display: flex;
 	gap: 20px;
@@ -107,8 +104,7 @@ body, html {
 .bg-delivery {
 	background: linear-gradient(135deg, #1fa2ff, #12d8fa);
 }
-
-/* --- Table Styling --- */
+/* Table Styling */
 .table-container {
 	background: white;
 	border-radius: 12px;
@@ -128,15 +124,11 @@ body, html {
 	transition: 0.3s;
 }
 
-.badge {
-	transition: transform 0.3s;
-}
-
 .badge:hover {
 	transform: scale(1.1);
+	transition: transform 0.3s;
 }
-
-/* --- Admin Info Card --- */
+/* Admin Info Card */
 .admin-card {
 	display: flex;
 	align-items: center;
@@ -164,15 +156,17 @@ body, html {
 	margin: 0;
 	color: #555;
 }
-
-/* --- Responsive --- */
-@media ( max-width :768px) {
+/* Responsive */
+@media ( max-width : 768px) {
 	.content {
 		margin-left: 0;
+		margin-top: 65px;
 	}
 	.sidebar {
 		position: relative;
 		width: 100%;
+		top: 0;
+		height: auto;
 		padding-top: 0;
 	}
 	.stats {
@@ -180,32 +174,38 @@ body, html {
 	}
 }
 </style>
+
 </head>
 <body>
 
+	<!-- Include Navbar -->
 	<jsp:include page="admin-navbar.jsp"></jsp:include>
-	
 
+	<!-- Main Wrapper -->
 	<div class="main-wrapper">
 
 		<!-- Sidebar -->
 		<div class="sidebar">
 			<h5 class="text-center mb-3">Admin Panel</h5>
-			<a href="#" class="active" onclick="showTable('users', this)">👤
-				Users</a> <a href="#" onclick="showTable('sellers', this)">🛒
-				Sellers</a> <a href="#" onclick="showTable('delivery', this)">🚚
-				Delivery Persons</a> <a href="admin-profile.jsp">⚙ Profile</a> <a
-				href="login.jsp" class="text-danger">Logout</a>
+			<a href="#" class="active" onclick="showTable('users', this)"><i
+				class="bi bi-people-fill"></i> Users</a> <a href="#"
+				onclick="showTable('sellers', this)"><i class="bi bi-shop"></i>
+				Sellers</a> <a href="#" onclick="showTable('delivery', this)"><i
+				class="bi bi-truck"></i> Delivery Persons</a>
 		</div>
 
 		<!-- Content -->
 		<div class="content">
 
 			<!-- Admin Info Card -->
+			<%
+			Admin admin = (Admin) request.getAttribute("admin");
+			String adminName = (admin != null && admin.getName() != null) ? admin.getName() : "Admin";
+			%>
 			<div class="admin-card">
-				<img src="https://via.placeholder.com/70" alt="Admin Photo">
+				<img src="./images/avtar.jpg" alt="Admin Photo">
 				<div>
-					<h4>John Doe</h4>
+					<h4><%=adminName%></h4>
 					<p>Super Admin</p>
 				</div>
 			</div>
@@ -214,17 +214,17 @@ body, html {
 			<div class="stats">
 				<div class="card-stats bg-users">
 					<h5>Total Users</h5>
-					<h3>150</h3>
+					<h3><%=request.getAttribute("totalUsers") != null ? request.getAttribute("totalUsers") : 0%></h3>
 					<i class="fas fa-users"></i>
 				</div>
 				<div class="card-stats bg-sellers">
 					<h5>Total Sellers</h5>
-					<h3>50</h3>
+					<h3><%=request.getAttribute("totalSellers") != null ? request.getAttribute("totalSellers") : 0%></h3>
 					<i class="fas fa-store"></i>
 				</div>
 				<div class="card-stats bg-delivery">
 					<h5>Delivery Persons</h5>
-					<h3>25</h3>
+					<h3><%=request.getAttribute("totalDelivery") != null ? request.getAttribute("totalDelivery") : 0%></h3>
 					<i class="fas fa-truck"></i>
 				</div>
 			</div>
@@ -355,23 +355,16 @@ body, html {
 			</div>
 
 		</div>
-		<!-- content -->
-	</div>
-	<!-- main-wrapper -->
 
-	<footer class="text-center p-2 bg-dark text-white">&copy; 2025
-		Cashify. All rights reserved.</footer>
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-function showTable(id, element){
-  document.querySelectorAll('.table-container').forEach(t => t.style.display='none');
-  document.getElementById(id).style.display='block';
-  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-  element.classList.add('active');
-}
-</script>
-
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script>
+			function showTable(id, element){
+				document.querySelectorAll('.table-container').forEach(t => t.style.display='none');
+				document.getElementById(id).style.display='block';
+				document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+				element.classList.add('active');
+			}
+		</script>
 </body>
 </html>

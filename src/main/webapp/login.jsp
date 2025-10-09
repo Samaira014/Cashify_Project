@@ -48,7 +48,7 @@
                 <option value="" disabled selected>Choose role</option>
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
-                <option value="delivery">Delivery Person</option>
+                <option value="deliveryperson">Delivery Person</option>
                 <option value="seller">Seller</option>
               </select>
             </div>

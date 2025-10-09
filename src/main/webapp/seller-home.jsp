@@ -147,10 +147,10 @@ body {
     <!-- Sidebar -->
     <div class="col-md-3 sidebar">
         <a href="seller-home.jsp" class="active"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-        <a href="sell-electronic-items.jsp"><i class="bi bi-plus-circle"></i> Sell a Phone</a>
-        <a href="my-listings.jsp"><i class="bi bi-phone"></i> My Listings</a>
-        <a href="#"><i class="bi bi-graph-up"></i> Sales Reports</a>
-        <a href="#"><i class="bi bi-gear-fill"></i> Settings</a>
+        <a href="seller-added-items.jsp"><i class="bi bi-plus-circle"></i> Sell a Phone</a>
+        <a href="seller-listing.jsp"><i class="bi bi-phone"></i> My Listings</a>
+        <a href="seller-sales-report.jsp"><i class="bi bi-graph-up"></i> Sales Reports</a>
+        <a href="seller-settings.jsp"><i class="bi bi-gear-fill"></i> Settings</a>
     </div>
 
     <!-- Main Content -->

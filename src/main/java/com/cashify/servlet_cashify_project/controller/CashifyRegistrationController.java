@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import com.cashify.servlet_cashify_project.dao.AdminDao;
+import com.cashify.servlet_cashify_project.dao.DeliveryPersonDao;
 import com.cashify.servlet_cashify_project.dao.SellerDao;
 import com.cashify.servlet_cashify_project.dao.UserDao;
 import com.cashify.servlet_cashify_project.dto.Admin;
+import com.cashify.servlet_cashify_project.dto.DeliveryPerson;
 import com.cashify.servlet_cashify_project.dto.Seller;
 import com.cashify.servlet_cashify_project.dto.User;
 
@@ -19,7 +21,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/register")
 public class CashifyRegistrationController extends HttpServlet {
 
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
@@ -40,7 +47,7 @@ public class CashifyRegistrationController extends HttpServlet {
                 }
 
             } else if ("admin".equalsIgnoreCase(role)) {
-                Admin admin = new Admin(id, email, password);
+                Admin admin = new Admin(id,name, email, password);
                 Admin savedAdmin = new AdminDao().saveAdmin(admin);
 
                 if (savedAdmin != null) {
@@ -58,7 +65,26 @@ public class CashifyRegistrationController extends HttpServlet {
                 } else {
                     resp.getWriter().println("Failed to register Seller");
                 }
+            }else if ("delivery".equalsIgnoreCase(role)) {
+                // For delivery person, ID is auto-generated in DB
+                DeliveryPerson delivery =  new DeliveryPerson();
+                
+                delivery.setName(name);
+                delivery.setEmail(email);
+                delivery.setPhone(phone); // ensure phone matches DTO type
+                delivery.setPassword(password);
+                delivery.setStatus("Available"); // default status
+
+                boolean isSaved = new DeliveryPersonDao().saveDeliveryPerson(delivery);
+
+                if (isSaved) {
+                    // Redirect to delivery login page after successful registration
+                    resp.sendRedirect("login.jsp?msg=Registration successful! Please login.");
+                } else {
+                    resp.getWriter().println("Failed to register Delivery Person");
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             resp.getWriter().println("Something went wrong: " + e.getMessage());

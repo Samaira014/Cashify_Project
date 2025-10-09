@@ -78,12 +78,12 @@
     <div class="row g-4">
       <!-- Gadget Categories -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-      <a href="phone-brand.jsp" class="text-decoration-none">
-        <div class="category-card">
-          <img src="./images/giphone1.png" alt="Smartphone">
+      	<div class="category-card">
+      		<a href="phone-brand.jsp" class="text-decoration-none">
+          		<img src="./images/giphone1.png" alt="Smartphone">
+            </a>
           <h5>Smartphones</h5>
         </div>
-        </a>
       </div>
 
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">

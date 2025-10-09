@@ -25,6 +25,8 @@ public class AdminDao {
 			if (resultSet.next()) {
 
 				Admin admin = new Admin();
+				admin.setId(resultSet.getInt("id"));           // set ID
+		        admin.setName(resultSet.getString("name"));
 				admin.setEmail(resultSet.getString("email"));
 				admin.setPassword(resultSet.getString("password"));
 
@@ -42,12 +44,13 @@ public class AdminDao {
 	 // ✅ Register (Insert new Admin)
     public Admin saveAdmin(Admin admin) {
         try {
-            String insertQuery = "INSERT INTO admin (id, email, password) VALUES (?, ?, ?)";
+            String insertQuery = "INSERT INTO admin (id,name, email, password) VALUES (?, ?, ?, ?)";
             PreparedStatement ps = connection.prepareStatement(insertQuery);
 
             ps.setInt(1, admin.getId());
-            ps.setString(2, admin.getEmail());
-            ps.setString(3, admin.getPassword());
+            ps.setString(2, admin.getName());
+            ps.setString(3, admin.getEmail());
+            ps.setString(4, admin.getPassword());
 
             int rows = ps.executeUpdate();
             if (rows > 0) {

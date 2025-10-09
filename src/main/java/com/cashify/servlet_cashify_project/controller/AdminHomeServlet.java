@@ -21,7 +21,12 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/admin-home")
 public class AdminHomeServlet extends HttpServlet {
-    @Override
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	
@@ -32,6 +37,18 @@ public class AdminHomeServlet extends HttpServlet {
         }
         
         try (Connection con = CashifyConnection.getCashifyConnection()) {
+        	
+        	// ===== Fetch Admin Name =====
+            String adminEmail = (String) session.getAttribute("email"); // set this at login
+            String adminName = "Admin"; // default
+            try (Statement stAdmin = con.createStatement();
+                 ResultSet rsAdmin = stAdmin.executeQuery(
+                     "SELECT name FROM admin WHERE email='" + adminEmail + "'")) {
+                if (rsAdmin.next()) {
+                    adminName = rsAdmin.getString("name");
+                }
+            }
+            request.setAttribute("adminName", adminName);
 
             // ===== Fetch Users =====
             List<Map<String, String>> users = new ArrayList<>();

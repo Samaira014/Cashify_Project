@@ -140,17 +140,17 @@ input[list]:hover {
     <!-- Sidebar -->
     <div class="col-md-3 sidebar">
         <a href="seller-home.jsp"><i class="bi bi-house-door-fill"></i> Dashboard</a>
-        <a href="sell-electronic.jsp" class="active"><i class="bi bi-plus-circle"></i> Sell an Item</a>
-        <a href="my-listings.jsp"><i class="bi bi-phone"></i> My Listings</a>
-        <a href="#"><i class="bi bi-graph-up"></i> Sales Reports</a>
-        <a href="#"><i class="bi bi-gear-fill"></i> Settings</a>
+        <a href="seller-added-items.jsp" class="active"><i class="bi bi-plus-circle"></i> Sell an Item</a>
+        <a href="seller-listing.jsp"><i class="bi bi-phone"></i> My Listings</a>
+        <a href="seller-sales-report.jsp"><i class="bi bi-graph-up"></i> Sales Reports</a>
+        <a href="seller-settings.jsp"><i class="bi bi-gear-fill"></i> Settings</a>
     </div>
 
     <!-- Main Content -->
     <div class="col-md-9">
         
         <div class="form-card">
-            <form action="AddElectronicItemServlet" method="post" enctype="multipart/form-data">
+            <form action="SellerAddedItemController" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="sellerId" value="<%= seller.getId() %>">
 
                 <div class="row g-3">
@@ -202,9 +202,9 @@ input[list]:hover {
                 <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe your item"></textarea>
 
                 <div class="text-center mt-3">
-    <button type="submit" class="btn btn-submit w-25"><i class="bi bi-plus-circle"></i> Add Item</button>
-</div>
-            </form>
+				    <button type="submit" class="btn btn-submit w-25"><i class="bi bi-plus-circle"></i> Add Item</button>
+				</div>
+			</form>
         </div>
     </div>
   </div>
