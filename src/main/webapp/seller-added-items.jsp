@@ -185,6 +185,7 @@ input[list]:hover {
                         </select>
                     </div>
                 </div>
+                
 
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -197,6 +198,13 @@ input[list]:hover {
                         <img id="imagePreview" src="#" alt="Image Preview">
                     </div>
                 </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="brand" class="form-label">Quantity</label>
+                        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity" required>
+                    </div>
+                </div> 
 
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe your item"></textarea>

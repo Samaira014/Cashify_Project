@@ -108,7 +108,7 @@
             <li><span class="dropdown-item">Email: <%= seller.getEmail() %></span></li>
             <li><span class="dropdown-item">Phone: <%= seller.getPhone() %></span></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="logout.jsp"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+            <li><a class="dropdown-item text-danger" href="sellerLogout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           </ul>
         </li>
       </ul>

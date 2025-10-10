@@ -123,5 +123,19 @@ public class SellerDao {
         return false;
     }
 
-	
+ // Get total number of sellers
+    public int getTotalSellers() {
+        int total = 0;
+        try {
+            String sql = "SELECT COUNT(*) AS total FROM sellers";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
 }

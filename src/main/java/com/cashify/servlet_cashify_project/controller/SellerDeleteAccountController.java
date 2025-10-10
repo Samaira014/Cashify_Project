@@ -13,8 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 
-@WebServlet("/SellerDeleteController")
-public class SellerDeleteController extends HttpServlet {
+@WebServlet("/SellerDeleteAccountController")
+public class SellerDeleteAccountController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

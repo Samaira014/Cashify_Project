@@ -186,12 +186,12 @@
 
 		<!-- Sidebar -->
 		<div class="sidebar">
-			<h5 class="text-center mb-3">Admin Panel</h5>
-			<a href="#" class="active" onclick="showTable('users', this)"><i
-				class="bi bi-people-fill"></i> Users</a> <a href="#"
-				onclick="showTable('sellers', this)"><i class="bi bi-shop"></i>
-				Sellers</a> <a href="#" onclick="showTable('delivery', this)"><i
-				class="bi bi-truck"></i> Delivery Persons</a>
+		<h5 class="text-center mb-3">Admin Panel</h5>
+			<a href="#" class="active" onclick="showSection('dashboard', this)"><i class="bi bi-house-door-fill"></i> Dashboard</a> 
+			<a href="admin-user.jsp" onclick="showSection('users', this)"><i class="bi bi-people-fill"></i> Users</a> 
+			<a href="admin-seller.jsp" onclick="showSection('sellers', this)"><i class="bi bi-shop"></i>Sellers</a>
+			<a href="admin-delivery.jsp" onclick="showSection('delivery', this)"><i class="bi bi-truck"></i> Delivery Persons</a>
+
 		</div>
 
 		<!-- Content -->
@@ -229,8 +229,8 @@
 				</div>
 			</div>
 
-			<!-- Users Table -->
-			<div id="users" class="table-container">
+			<!-- Users Section -->
+			<div id="users" class="table-container" style="display: none;">
 				<h4>Registered Users</h4>
 				<table class="table table-striped">
 					<thead>
@@ -239,7 +239,7 @@
 							<th>Name</th>
 							<th>Email</th>
 							<th>Phone</th>
-							<th>Joined Date</th>
+							<th>Details</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -253,7 +253,8 @@
 							<td><%=u.get("name")%></td>
 							<td><%=u.get("email")%></td>
 							<td><%=u.get("phone")%></td>
-							<td><%=u.get("joined_date")%></td>
+							<td><button class="btn btn-primary btn-sm"
+									onclick="showUserDetails('<%=u.get("id")%>')">View</button></td>
 						</tr>
 						<%
 						}
@@ -267,9 +268,26 @@
 						%>
 					</tbody>
 				</table>
+
+				<!-- User Details -->
+				<div id="userDetails" style="display: none; margin-top: 20px;">
+					<h4>User Orders</h4>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>Order ID</th>
+								<th>Product</th>
+								<th>Status</th>
+								<th>Returned</th>
+							</tr>
+						</thead>
+						<tbody id="userOrdersBody"></tbody>
+					</table>
+					<button class="btn btn-secondary" onclick="closeUserDetails()">Close</button>
+				</div>
 			</div>
 
-			<!-- Sellers Table -->
+			<!-- Sellers Section -->
 			<div id="sellers" class="table-container" style="display: none;">
 				<h4>Sellers</h4>
 				<table class="table table-striped">
@@ -312,7 +330,7 @@
 				</table>
 			</div>
 
-			<!-- Delivery Table -->
+			<!-- Delivery Section -->
 			<div id="delivery" class="table-container" style="display: none;">
 				<h4>Delivery Persons</h4>
 				<table class="table table-striped">
@@ -353,18 +371,36 @@
 					</tbody>
 				</table>
 			</div>
-
 		</div>
-
+</div>
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 		<script>
-			function showTable(id, element){
-				document.querySelectorAll('.table-container').forEach(t => t.style.display='none');
-				document.getElementById(id).style.display='block';
-				document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-				element.classList.add('active');
-			}
-		</script>
+		function showSection(id, element){
+		    document.querySelectorAll('.table-container').forEach(t => t.style.display='none');
+		    document.getElementById(id).style.display='block';
+		    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+		    element.classList.add('active');
+		    if(id !== 'users') document.getElementById('userDetails').style.display='none';
+		}
+
+
+function showUserDetails(userId){
+    fetch('UserOrdersController?userId='+userId)
+    .then(res=>res.json())
+    .then(data=>{
+        const tbody=document.getElementById('userOrdersBody');
+        tbody.innerHTML='';
+        data.forEach(order=>{
+            const tr=document.createElement('tr');
+            tr.innerHTML=`<td>${order.id}</td><td>${order.product}</td><td>${order.status}</td><td>${order.returned}</td>`;
+            tbody.appendChild(tr);
+        });
+        document.getElementById('userDetails').style.display='block';
+    });
+}
+
+function closeUserDetails(){ document.getElementById('userDetails').style.display='none'; }
+</script>
 </body>
 </html>

@@ -1,10 +1,7 @@
 package com.cashify.servlet_cashify_project.controller;
 
-import java.io.IOException;
-
 import com.cashify.servlet_cashify_project.dao.SellerDao;
 import com.cashify.servlet_cashify_project.dto.Seller;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,17 +9,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.IOException;
+
 @WebServlet("/SellerSettingsController")
 public class SellerSettingsController extends HttpServlet {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private final SellerDao sellerDao = new SellerDao();
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-
+    // Display the form (GET)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Seller seller = (Seller) session.getAttribute("seller");
 
@@ -31,49 +26,42 @@ public class SellerSettingsController extends HttpServlet {
             return;
         }
 
-        try {
-            // Get form data
-            String fullName = request.getParameter("fullName");
-            String email = request.getParameter("email");
-            String phoneStr = request.getParameter("phone");
-            String password = request.getParameter("password"); // optional
+        request.setAttribute("seller", seller); // forward seller data to JSP
+        request.getRequestDispatcher("seller-settings.jsp").forward(request, response);
+    }
 
-            // Validate and parse phone
-            long phone = 0;
-            try {
-                phone = Long.parseLong(phoneStr);
-            } catch (NumberFormatException e) {
-                session.setAttribute("errorMsg", "Invalid phone number!");
-                response.sendRedirect("seller-settings.jsp");
-                return;
-            }
+    // Handle form submission (POST)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Seller seller = (Seller) session.getAttribute("seller");
 
-            // Update seller object
-            seller.setName(fullName);
-            seller.setEmail(email);
-            seller.setPhone(phone);
-
-            if (password != null && !password.trim().isEmpty()) {
-                seller.setPassword(password); // only update if not empty
-            }
-
-            // Save to database
-            SellerDao dao = new SellerDao();
-            boolean updated = dao.updateSeller(seller);
-
-            if (updated) {
-                session.setAttribute("successMsg", "Settings updated successfully!");
-                session.setAttribute("seller", seller); // update session
-            } else {
-                session.setAttribute("errorMsg", "Failed to update settings.");
-            }
-
-            response.sendRedirect("seller-settings.jsp");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.setAttribute("errorMsg", "Internal server error: " + e.getMessage());
-            response.sendRedirect("seller-settings.jsp");
+        if (seller == null) {
+            response.sendRedirect("login.jsp");
+            return;
         }
+
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
+        long phone = Long.parseLong(request.getParameter("phone"));
+        String password = request.getParameter("password"); // leave blank to keep old password
+
+        seller.setName(fullName);
+        seller.setEmail(email);
+        seller.setPhone(phone);
+
+        if (password != null && !password.isEmpty()) {
+            seller.setPassword(password);
+        }
+
+        boolean updated = sellerDao.updateSeller(seller); // implement this method in SellerDao
+
+        if (updated) {
+            session.setAttribute("successMsg", "Settings updated successfully!");
+        } else {
+            session.setAttribute("errorMsg", "Failed to update settings!");
+        }
+
+        // Redirect to GET to reload form with updated info
+        response.sendRedirect("SellerSettingsController");
     }
 }

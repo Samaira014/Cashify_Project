@@ -31,7 +31,63 @@
 .d-block {
 	height: 400px;
 }
+.carousel-fade .carousel-item {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
 
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-start,
+.carousel-fade .carousel-item-prev.carousel-item-end {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+/* --- Zoom animation on images --- */
+.carousel-item img {
+  transition: transform 8s ease;
+}
+
+.carousel-item.active img {
+  transform: scale(1.1);
+}
+
+/* --- Animated captions --- */
+.animate-caption h5,
+.animate-caption p {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease forwards;
+}
+
+.animate-caption h5 {
+  animation-delay: 0.4s;
+}
+
+.animate-caption p {
+  animation-delay: 0.7s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+/* --- Prev/Next Button Hover Effect --- */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.6));
+  transition: transform 0.3s ease;
+}
+
+.carousel-control-prev:hover .carousel-control-prev-icon,
+.carousel-control-next:hover .carousel-control-next-icon {
+  transform: scale(1.2);
+}
 /*-------------Our Service Start here-------------------*/
 
 /* Section */
@@ -263,55 +319,54 @@ keyframes fadeUp {to { opacity:1;
 	<jsp:include page="header.jsp"></jsp:include>
 
 	<!-- Carousel -->
-	<div id="carouselExampleCaptions" class="carousel slide">
-		<div class="carousel-indicators">
-			<button type="button" data-bs-target="#carouselExampleCaptions"
-				data-bs-slide-to="0" class="active" aria-current="true"
-				aria-label="Slide 1"></button>
-			<button type="button" data-bs-target="#carouselExampleCaptions"
-				data-bs-slide-to="1" aria-label="Slide 2"></button>
-			<button type="button" data-bs-target="#carouselExampleCaptions"
-				data-bs-slide-to="2" aria-label="Slide 3"></button>
-		</div>
-		<div class="carousel-inner">
-			<div class="carousel-item active">
-				<img src="./images/carousel8.jpg" class="d-block w-100"
-					alt="Slide 1">
-				<div class="carousel-caption d-none d-md-block">
-					<h5>Sell & Buy with Cashify</h5>
-					<p>Smart solutions for your gadgets, phones, and recycling
-						needs.</p>
-				</div>
-			</div>
-			<div class="carousel-item">
-				<img src="./images/carousel9.jpg" class="d-block w-100"
-					alt="Slide 2">
-				<div class="carousel-caption d-none d-md-block">
-					<h5>Find Stores Near You</h5>
-					<p>Locate trusted Cashify partners around you.</p>
-				</div>
-			</div>
-			<div class="carousel-item">
-				<img src="./images/carousel10.jpg" class="d-block w-100"
-					alt="Slide 3">
-				<div class="carousel-caption d-none d-md-block">
-					<h5>Recycle Responsibly</h5>
-					<p>Eco-friendly way to recycle your gadgets.</p>
-				</div>
-			</div>
-		</div>
-		<button class="carousel-control-prev" type="button"
-			data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-				class="visually-hidden">Previous</span>
-		</button>
-		<button class="carousel-control-next" type="button"
-			data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span> <span
-				class="visually-hidden">Next</span>
-		</button>
-	</div>
+<div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
+      class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+      aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+      aria-label="Slide 3"></button>
+  </div>
 
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="./images/carousel8.jpg" class="d-block w-100" alt="Slide 1">
+      <div class="carousel-caption d-none d-md-block animate-caption">
+        <h5>Sell and Buy with Cashify</h5>
+        <p>Smart solutions for your gadgets, phones, and recycling needs.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="./images/carousel9.jpg" class="d-block w-100" alt="Slide 2">
+      <div class="carousel-caption d-none d-md-block animate-caption">
+        <h5>Find Stores Near You</h5>
+        <p>Locate trusted Cashify partners around you.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="./images/carousel10.jpg" class="d-block w-100" alt="Slide 3">
+      <div class="carousel-caption d-none d-md-block animate-caption">
+        <h5>Recycle Responsibly</h5>
+        <p>Eco-friendly way to recycle your gadgets.</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+    data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+    data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 	<!-- -----------Our Service----------------------- -->
 
 	<section class="services-section">

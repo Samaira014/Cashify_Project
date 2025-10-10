@@ -17,9 +17,11 @@ public class Product {
 	private String category;
 	private double price;
 	private String condition;
+	private int quantity;
 	private String description;
 	private byte[] image;
 	private double discountedPrice;// nullable
+	private String rejection_msg;
 
 	public Double getDiscountedPrice() {
 		return discountedPrice;
