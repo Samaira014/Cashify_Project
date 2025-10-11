@@ -3,7 +3,9 @@ package com.cashify.servlet_cashify_project.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.cashify.servlet_cashify_project.connection.CashifyConnection;
@@ -63,6 +65,20 @@ public class SalesDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        //dummy data
+//        SalesReport sale = new SalesReport();
+//        sale.setId(1);
+//        sale.setOrderId(3);
+//        sale.setSellerId(2);
+//        sale.setProductId(3);
+//        sale.setQuantity(6);
+//        sale.setPrice(56.0);
+//        sale.setTotalPrice(89.0);
+//        sale.setStatus("dsa");
+//        sale.setSaleDate(null);
+//        list.add(sale);
+        
         return list;
     }
 

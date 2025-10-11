@@ -82,7 +82,9 @@
       <!-- Apple -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
+        <a href="phone-listing.jsp">
           <img src="./images/Apple-iPhone.jpg" alt="Apple iPhone">
+          </a>
           <h5>Apple</h5>
         </div>
       </div>
@@ -90,7 +92,7 @@
       <!-- Samsung -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="./images/samsung-galaxy-s24.jpg" alt="Samsung">
+          <img src="./images/galexy.jpg" alt="Samsung">
           <h5>Samsung</h5>
         </div>
       </div>
@@ -98,7 +100,7 @@
       <!-- OnePlus -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=OnePlus" alt="OnePlus">
+          <img src="./images/oneplus.jpg" alt="OnePlus">
           <h5>OnePlus</h5>
         </div>
       </div>
@@ -106,7 +108,7 @@
       <!-- Xiaomi -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Xiaomi+Mi" alt="Xiaomi">
+          <img src="./images/redmi.jpg" alt="Xiaomi">
           <h5>Xiaomi</h5>
         </div>
       </div>
@@ -114,7 +116,7 @@
       <!-- Realme -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Realme" alt="Realme">
+          <img src="./images/realme.jpg" alt="Realme">
           <h5>Realme</h5>
         </div>
       </div>
@@ -122,7 +124,7 @@
       <!-- Oppo -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Oppo" alt="Oppo">
+          <img src="./images/oopo.jpg" alt="Oppo">
           <h5>Oppo</h5>
         </div>
       </div>
@@ -130,7 +132,7 @@
       <!-- Vivo -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Vivo" alt="Vivo">
+          <img src="./images/vivo.png" alt="Vivo">
           <h5>Vivo</h5>
         </div>
       </div>
@@ -138,7 +140,7 @@
       <!-- Google Pixel -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Google+Pixel" alt="Google Pixel">
+          <img src="./images/google.jpg" alt="Google Pixel">
           <h5>Google Pixel</h5>
         </div>
       </div>
@@ -146,7 +148,7 @@
       <!-- Motorola -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Motorola" alt="Motorola">
+          <img src="./images/moto.jpg" alt="Motorola">
           <h5>Motorola</h5>
         </div>
       </div>
@@ -154,7 +156,7 @@
       <!-- Nothing -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Nothing+Phone" alt="Nothing Phone">
+          <img src="./images/nothing.jpg" alt="Nothing Phone">
           <h5>Nothing</h5>
         </div>
       </div>
@@ -162,7 +164,7 @@
       <!-- Nokia -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Nokia" alt="Nokia">
+          <img src="./images/nokia.jpg" alt="Nokia">
           <h5>Nokia</h5>
         </div>
       </div>
@@ -170,7 +172,7 @@
       <!-- Infinix -->
       <div class="col-6 col-sm-4 col-md-3 col-lg-2">
         <div class="category-card">
-          <img src="https://via.placeholder.com/300x200?text=Infinix" alt="Infinix">
+          <img src="./images/infinix.jpg" alt="Infinix">
           <h5>Infinix</h5>
         </div>
       </div>

@@ -15,6 +15,7 @@
 
     SalesDao dao = new SalesDao();
     List<SalesReport> salesList = dao.getSalesBySellerId(seller.getId());
+    System.out.println(salesList.size());
 %>
 
 <!DOCTYPE html>

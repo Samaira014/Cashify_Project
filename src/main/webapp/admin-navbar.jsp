@@ -131,7 +131,7 @@
             <li><a class="dropdown-item" href="admin-profile.jsp"><i class="bi bi-person"></i> Profile</a></li>
             <li><a class="dropdown-item" href="admin-change-password.jsp"><i class="bi bi-lock"></i> Change Password</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="logout.jsp"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+            <li><a class="dropdown-item text-danger" href="logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           </ul>
         </li>
       </ul>

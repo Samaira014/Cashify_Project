@@ -62,15 +62,15 @@ public class CashifyLoginController extends HttpServlet {
 			    req.getRequestDispatcher("login.jsp").forward(req, resp);
 			}
 		} else if (role.equalsIgnoreCase("deliveryperson")) {
-		    // Fetch delivery person by email
-			DeliveryPerson dp = new DeliveryPersonDao().getByEmail(email);
-			if(dp != null && dp.getPassword().equals(password)) {
-			    httpSession.setAttribute("delivery", dp);
-			    resp.sendRedirect("delivery-home.jsp"); // Make sure this file exists
-			} else {
-			    req.setAttribute("msg", "Please check your credentials");
-			    req.getRequestDispatcher("login.jsp").forward(req, resp);
-			}
+			 DeliveryPerson dp = new DeliveryPersonDao().getByEmail(email);
+			    if (dp != null && dp.getPassword().equals(password)) {
+			        httpSession.setAttribute("deliveryPerson", dp); // ✅ match JSP
+			        httpSession.setAttribute("role", "delivery");
+			        resp.sendRedirect("delivery-home"); // ✅ controller handles JSP
+			    } else {
+			        req.setAttribute("msg", "Please check your credentials");
+			        req.getRequestDispatcher("login.jsp").forward(req, resp);
+			    }
 		} else {
 
 			User user = new UserDao().getUserByEmailDao(email);

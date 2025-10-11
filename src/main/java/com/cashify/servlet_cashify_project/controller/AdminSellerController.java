@@ -32,6 +32,6 @@ public class AdminSellerController extends HttpServlet {
 
 
         // Forward to JSP page
-        request.getRequestDispatcher("admin-sellers.jsp").forward(request, response);
+        request.getRequestDispatcher("admin-seller.jsp").forward(request, response);
     }
 }

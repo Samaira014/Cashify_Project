@@ -13,20 +13,22 @@ public class OrderDao {
 
     // Add New Order
     public boolean addOrder(Order order) {
-        String query = "INSERT INTO orders (userid, seller_id, product_id, address, quantity, total_price, payment_status, coupon_code, delivery_note, delivery_date, created_at) "
-                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO orders (userid, seller_id, product_id,delivery_id, address, quantity, total_price, payment_status,order_date, coupon_code, delivery_note, delivery_date, created_at) "
+                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, order.getUserid());
             ps.setInt(2, order.getSeller_id());
             ps.setInt(3, order.getProduct_id());
-            ps.setString(4, order.getAddress());
-            ps.setInt(5, order.getQuantity());
-            ps.setDouble(6, order.getTotal_price());
-            ps.setString(7, order.getPayment_status());
-            ps.setString(8, order.getCoupon_code());
-            ps.setString(9, order.getDelivery_note());
-            ps.setDate(10, order.getDelivery_date());
-            ps.setTimestamp(11, order.getCreated_at());
+            ps.setInt(4, order.getDelivery_id());
+            ps.setString(5, order.getAddress());
+            ps.setInt(6, order.getQuantity());
+            ps.setDouble(7, order.getTotal_price());
+            ps.setString(8, order.getPayment_status());
+            ps.setTimestamp(9, order.getOrder_date());
+            ps.setString(10, order.getCoupon_code());
+            ps.setString(11, order.getDelivery_note());
+            ps.setDate(12, order.getDelivery_date());
+            ps.setTimestamp(13, order.getCreated_at());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("❌ Error adding new order: " + e.getMessage());

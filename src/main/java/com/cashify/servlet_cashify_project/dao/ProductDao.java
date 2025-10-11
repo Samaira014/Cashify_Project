@@ -3,6 +3,7 @@ package com.cashify.servlet_cashify_project.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -98,7 +99,8 @@ public class ProductDao {
 				p.setQuantity(rs.getInt("quantity"));
 				p.setDescription(rs.getString("descriptions"));
 				p.setImage(rs.getBytes("image"));
-				p.setDiscountedPrice(rs.getObject("discounted_price") != null ? rs.getDouble("discounted_price") : null);
+				p.setDiscountedPrice(
+						rs.getObject("discounted_price") != null ? rs.getDouble("discounted_price") : null);
 				p.setRating(rs.getDouble("rating"));
 				p.setVerified(rs.getBoolean("verified"));
 				p.setJoinedDateTime(rs.getTimestamp("joinedDateTime"));
@@ -155,41 +157,128 @@ public class ProductDao {
 		}
 		return flag;
 	}
+
 	public boolean updateDiscountedPrice(int productId, double discountedPrice) {
-	    String sql = "UPDATE product SET discounted_price=? WHERE id=?";
-	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-	        ps.setDouble(1, discountedPrice);
-	        ps.setInt(2, productId);
-	        return ps.executeUpdate() > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+		String sql = "UPDATE product SET discounted_price=? WHERE id=?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setDouble(1, discountedPrice);
+			ps.setInt(2, productId);
+			return ps.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	// Verify a product
 	public boolean verifyProduct(int productId) {
-	    String sql = "UPDATE product SET verified=true, rejection_msg=NULL WHERE id=?";
-	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-	        ps.setInt(1, productId);
-	        return ps.executeUpdate() > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+		String sql = "UPDATE product SET verified=true, rejection_msg=NULL WHERE id=?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, productId);
+			return ps.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	// Reject a product with reason
 	public boolean rejectProduct(int productId, String reason) {
-	    String sql = "UPDATE product SET verified=false, rejection_msg=? WHERE id=?";
-	    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-	        ps.setString(1, reason);
-	        ps.setInt(2, productId);
-	        return ps.executeUpdate() > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+		String sql = "UPDATE product SET verified=false, rejection_msg=? WHERE id=?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, reason);
+			ps.setInt(2, productId);
+			return ps.executeUpdate() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
+	// Get filtered product list
+	public List<Product> getFilteredProducts(String brand, String category, String sort, String q) {
+	    List<Product> list = new ArrayList<>();
+	    StringBuilder sql = new StringBuilder("SELECT * FROM product WHERE verified = true");
+
+	    if (brand != null && !"all".equalsIgnoreCase(brand)) {
+	        sql.append(" AND brand = ?");
+	    }
+	    if (category != null && !"all".equalsIgnoreCase(category)) {
+	        sql.append(" AND category = ?");
+	    }
+	    if (q != null && !q.isEmpty()) {
+	        sql.append(" AND productName LIKE ?");
+	    }
+
+	    if ("price_asc".equals(sort)) sql.append(" ORDER BY discounted_price ASC");
+	    else if ("price_desc".equals(sort)) sql.append(" ORDER BY discounted_price DESC");
+	    else sql.append(" ORDER BY joinedDateTime DESC");
+
+	    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+	        int i = 1;
+	        if (brand != null && !"all".equalsIgnoreCase(brand)) ps.setString(i++, brand);
+	        if (category != null && !"all".equalsIgnoreCase(category)) ps.setString(i++, category);
+	        if (q != null && !q.isEmpty()) ps.setString(i++, "%" + q + "%");
+
+	        ResultSet rs = ps.executeQuery();
+	        while (rs.next()) {
+	            Product p = new Product();
+	            p.setId(rs.getInt("id"));
+	            p.setProductName(rs.getString("productName"));
+	            p.setBrand(rs.getString("brand"));
+	            p.setCategory(rs.getString("category"));
+	            p.setPrice(rs.getDouble("price"));
+	            p.setDiscountedPrice(rs.getDouble("discounted_price"));
+	            p.setRating(rs.getDouble("rating"));
+	            list.add(p);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
+	// Get unique brand names
+	public List<String> getAllBrands() {
+	    List<String> brands = new ArrayList<>();
+	    try (PreparedStatement ps = connection.prepareStatement("SELECT DISTINCT brand FROM product WHERE verified=true");
+	         ResultSet rs = ps.executeQuery()) {
+	        while (rs.next()) {
+	            brands.add(rs.getString("brand"));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return brands;
+	}
+
+	// Get unique categories
+	public List<String> getAllCategories() {
+	    List<String> categories = new ArrayList<>();
+	    try (PreparedStatement ps = connection.prepareStatement("SELECT DISTINCT category FROM product WHERE verified=true");
+	         ResultSet rs = ps.executeQuery()) {
+	        while (rs.next()) {
+	            categories.add(rs.getString("category"));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return categories;
+	}
+
+//✅ Get Product Image by ID
+	public byte[] getImage(int productId) {
+		byte[] imageData = null;
+		String sql = "SELECT image FROM product WHERE id = ?";
+		try (PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, productId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				imageData = rs.getBytes("image");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return imageData;
+	}
 }

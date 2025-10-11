@@ -1,7 +1,9 @@
+<%@page import="com.cashify.servlet_cashify_project.dto.Seller"%>
+<%@page import="com.cashify.servlet_cashify_project.dao.SellerDao"%>
 <%@page import="com.cashify.servlet_cashify_project.dao.ProductDao"%>
 <%@page import="com.cashify.servlet_cashify_project.dto.Product"%>
 <%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -10,8 +12,10 @@ ProductDao dao = new ProductDao();
 List<Product> products = dao.getAllProducts();
 %>
 <%
-List<Map<String, String>> sellers = (List<Map<String, String>>) request.getAttribute("sellers");
+SellerDao sellerDao = new SellerDao();
+List<Seller> sellers = sellerDao.getAllSellers();
 int totalSellers = (sellers != null) ? sellers.size() : 0;
+
 %>
 
 <!DOCTYPE html>
@@ -187,7 +191,7 @@ input.form-control-sm {
 				<div class="carousel card-stats bg-sellers"
 					onclick="showSection('totalSellersDiv')">
 					<h5>Total Sellers</h5>
-					<h3><%=request.getAttribute("totalSellers") != null ? request.getAttribute("totalSellers") : 0%></h3>
+					<h3><%=totalSellers%></h3>
 					<i class="fa-solid fa-store"></i>
 				</div>
 
@@ -228,13 +232,13 @@ input.form-control-sm {
 						<tbody>
 							<%
 								if (sellers != null && !sellers.isEmpty()) {
-								    for (Map<String, String> s : sellers) {
+								    for (Seller s: sellers) {
 								%>
 							<tr>
-								<td><%=s.get("id")%></td>
-								<td><%=s.get("name")%></td>
-								<td><%=s.get("email")%></td>
-								<td><%=s.get("phone")%></td>
+								<td><%=s.getId()%></td>
+								<td><%=s.getName()%></td>
+								<td><%=s.getEmail()%></td>
+								<td><%=s.getPhone()%></td>
 							</tr>
 							<%
 							}
@@ -358,15 +362,15 @@ input.form-control-sm {
 								<th>Seller</th>
 							</tr>
 						</thead>
-						<tbody>
+						<%--<tbody>
 							<%
 									List<Map<String, String>> approvedItems = (List<Map<String, String>>) request.getAttribute("approvedItems");
 									if (approvedItems != null) {
 										for (Map<String, String> a : approvedItems) {
 									%>
 							<tr>
-								<td><%=a.get("id")%></td>
-								<td><%=a.get("product")%></td>
+								<td><%=a.getId("id")%></td>
+								<td><%=a.getProduct("product")%></td>
 								<td><%=a.get("sellerName")%></td>
 							</tr>
 							<%
@@ -379,7 +383,7 @@ input.form-control-sm {
 							<%
 									}
 									%>
-						</tbody>
+						</tbody> --%>
 					</table>
 				</div>
 			</div>
@@ -396,7 +400,7 @@ input.form-control-sm {
 								<th>Status</th>
 							</tr>
 						</thead>
-						<tbody>
+						<%-- <tbody>
 							<%
 							List<Map<String, String>> soldItems = (List<Map<String, String>>) request.getAttribute("soldItems");
 							if (soldItems != null) {
@@ -418,7 +422,7 @@ input.form-control-sm {
 							<%
 							}
 							%>
-						</tbody>
+						</tbody>--%>
 					</table>
 				</div>
 			</div>

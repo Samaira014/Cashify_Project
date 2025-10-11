@@ -1,203 +1,266 @@
-<%@page import="java.util.Map"%>
-<%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="com.cashify.servlet_cashify_project.dto.Seller" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="com.cashify.servlet_cashify_project.dto.DeliveryPerson, java.util.List, java.util.Map"%>
+
 <%
-    Seller seller = (Seller) session.getAttribute("seller");
-    if (seller == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+DeliveryPerson delivery = (DeliveryPerson) session.getAttribute("deliveryPerson");
+if (delivery == null) {
+	response.sendRedirect("delivery-login.jsp");
+	return;
+}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Seller Dashboard | Cashify</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Delivery Dashboard | Cashify</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-    body {
-        background: #f8f9fa;
-        font-family: 'Poppins', sans-serif;
-    }
+/* ===== Sidebar ===== */
+.sidebar {
+	position: fixed;
+	top: 63px; /* below navbar */
+	left: 0;
+	width: 220px;
+	height: calc(100vh - 63px);
+	background: linear-gradient(135deg, #1d2671, #c33764);
+	color: #fff;
+	padding-top: 20px;
+	display: flex;
+	flex-direction: column;
+}
 
-    /* 🌟 Header */
-    .header {
-        background: linear-gradient(135deg, #1d2671, #c33764);
-        color: #fff;
-        padding: 20px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 0 0 20px 20px;
-    }
-    .header h2 {
-        margin: 0;
-        font-weight: 700;
-        font-size: 1.8rem;
-    }
-    .logout-btn {
-        background: #fff;
-        color: #c33764;
-        font-weight: 600;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        transition: 0.3s;
-    }
-    .logout-btn:hover {
-        background: #c33764;
-        color: #fff;
-    }
+.sidebar a {
+	color: #fff;
+	text-decoration: none;
+	padding: 12px 20px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	border-radius: 8px;
+	margin: 4px 10px;
+	transition: 0.3s;
+}
 
-    /* 🌈 Stats Section */
-    .stats-section {
-        margin: 40px auto;
-        max-width: 1000px;
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .stat-card {
-        flex: 1 1 250px;
-        border-radius: 18px;
-        color: #fff;
-        text-align: center;
-        padding: 35px 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        transition: all 0.4s ease;
-    }
-    .stat-card.assigned { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .stat-card.completed { background: linear-gradient(135deg, #43cea2, #185a9d); }
-    .stat-card.pending { background: linear-gradient(135deg, #f7971e, #ffd200); }
+.sidebar a:hover, .sidebar a.active {
+	background: rgba(255, 255, 255, 0.15);
+}
 
-    .stat-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
-    .stat-card h5 { font-weight: 600; margin-bottom: 10px; }
-    .stat-card h2 { font-weight: 800; font-size: 2.5rem; }
+/* ===== Main content ===== */
+.main-content {
+	margin-left: 240px;
+	padding: 30px;
+}
 
-    .stat-card:hover { transform: translateY(-10px) scale(1.05); }
+/* ===== Delivery Person Card ===== */
+.delivery-profile-row {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	background: #fff;
+	border-radius: 12px;
+	padding: 10px 15px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	
+	margin-bottom: 20px;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    /* 🌟 Table Section */
-    .card-table {
-        margin: 20px auto;
-        max-width: 1200px;
-        padding: 30px;
-        border-radius: 18px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        background: #fff;
-    }
-    .badge-delivered { background-color: #28a745; color: #fff; }
-    .badge-pending { background-color: #ffc107; color: #212529; }
-    .badge-delayed { background-color: #dc3545; color: #fff; }
+.delivery-profile-row:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
 
-    /* 🧭 Action Buttons */
-    .actions {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 30px;
-    }
-    .actions a {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: #fff;
-        font-weight: 600;
-        padding: 12px 25px;
-        border-radius: 10px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-    .actions a:hover {
-        background: linear-gradient(135deg, #764ba2, #667eea);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
+.profile-img img {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #1d2671;
+}
+
+.profile-info h4 {
+	margin: 0;
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: #1d2671;
+}
+
+.profile-info p {
+	margin: 2px 0 0;
+	font-size: 0.85rem;
+	color: #555;
+}
+
+/* ===== Stats Cards ===== */
+.stats-section {
+	display: flex;
+	gap: 15px;
+	flex-wrap: wrap;
+	margin-bottom: 25px;
+}
+
+.stat-card {
+	flex: 1 1 150px;
+	border-radius: 14px;
+	color: #fff;
+	text-align: center;
+	padding: 15px 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+	cursor: pointer;
+}
+
+.stat-card:hover {
+	transform: translateY(-7px);
+	box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.stat-card .icon {
+	font-size: 1.8rem;
+	margin-bottom: 8px;
+}
+
+.stat-card h5 {
+	font-size: 0.9rem;
+	margin: 0 0 5px;
+}
+
+.stat-card h2 {
+	font-size: 1.4rem;
+	font-weight: 700;
+	margin: 0;
+}
+
+.stat-card.assigned { background: linear-gradient(135deg, #667eea, #764ba2); }
+.stat-card.completed { background: linear-gradient(135deg, #43cea2, #185a9d); }
+.stat-card.pending { background: linear-gradient(135deg, #f7971e, #ffd200); }
+
+/* ===== Table ===== */
+.card-table {
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+	background: #fff;
+	animation: fadeIn 1s ease;
+}
+
+.badge-delivered { background-color: #28a745; color: #fff; }
+.badge-pending { background-color: #ffc107; color: #212529; }
+.badge-delayed { background-color: #dc3545; color: #fff; }
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(10px);}
+	to { opacity: 1; transform: translateY(0);}
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+	.sidebar { width: 60px; padding-top: 20px; }
+	.sidebar a span { display: none; }
+	.main-content { margin-left: 70px; margin-top: 80px; padding: 20px; }
+}
 </style>
 </head>
-
 <body>
-    <!-- 🌟 Header -->
-    <div class="header">
-        <h2>Welcome, <%= seller.getName() %> 👋</h2>
-        <form action="logout" method="post" style="margin: 0;">
-            <button type="submit" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
-        </form>
-    </div>
 
-    <!-- 🌈 Stats Cards -->
-    <div class="stats-section">
-        <div class="stat-card assigned">
-            <div class="icon"><i class="bi bi-box"></i></div>
-            <h5>Assigned Deliveries</h5>
-            <h2><%= request.getAttribute("assignedCount") != null ? request.getAttribute("assignedCount") : 0 %></h2>
-        </div>
-        <div class="stat-card completed">
-            <div class="icon"><i class="bi bi-check-circle"></i></div>
-            <h5>Completed</h5>
-            <h2><%= request.getAttribute("completedCount") != null ? request.getAttribute("completedCount") : 0 %></h2>
-        </div>
-        <div class="stat-card pending">
-            <div class="icon"><i class="bi bi-hourglass-split"></i></div>
-            <h5>Pending</h5>
-            <h2><%= request.getAttribute("pendingCount") != null ? request.getAttribute("pendingCount") : 0 %></h2>
-        </div>
-    </div>
+<!-- ===== Navbar ===== -->
+<jsp:include page="delivery-navbar.jsp"></jsp:include>
 
-    <!-- 📦 Recent Assigned Deliveries Table -->
-    <div class="card card-table">
-        <h5 class="mb-3">📦 Recent Assigned Deliveries</h5>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Products</th>
-                        <th>Status</th>
-                        <th>Delivery Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <%
-                    List deliveries = (List) request.getAttribute("assignedDeliveries");
-                    if (deliveries != null && !deliveries.isEmpty()) {
-                        for (Object obj : deliveries) {
-                            Map d = (Map) obj;
-                %>
-                    <tr>
-                        <td><%= d.get("order_id") %></td>
-                        <td><%= d.get("customer_name") %></td>
-                        <td><%= d.get("customer_phone") %></td>
-                        <td><%= d.get("address") %></td>
-                        <td><%= d.get("products") %></td>
-                        <td>
-                            <span class="badge 
-                                <%= "Delivered".equals(d.get("status")) ? "badge-delivered" 
-                                    : "Pending".equals(d.get("status")) ? "badge-pending" 
-                                    : "badge-delayed" %>">
-                                <%= d.get("status") %>
-                            </span>
-                        </td>
-                        <td><%= d.get("delivery_date") %></td>
-                    </tr>
-                <%
-                        }
-                    } else {
-                %>
-                    <tr><td colspan="7" class="text-center">No assigned deliveries yet 🚚</td></tr>
-                <%
-                    }
-                %>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<!-- ===== Sidebar ===== -->
+<div class="sidebar">
+	<a href="delivery-home" class="active"><i class="bi bi-house-door"></i> <span>Home</span></a>
+	<a href="delivery-assigned.jsp"><i class="bi bi-box"></i> <span>Assigned Orders</span></a>
+	<a href="delivery-history.jsp"><i class="bi bi-clock-history"></i> <span>Delivery History</span></a>
+	<a href="profile.jsp"><i class="bi bi-person"></i> <span>Profile</span></a>
+	<a href="logout"><i class="bi bi-box-arrow-right"></i> <span>Logout</span></a>
+</div>
+
+<!-- ===== Main Content ===== -->
+<div class="main-content">
+
+	<!-- Delivery Person Card -->
+	<div class="delivery-profile-row">
+		<div class="profile-img">
+			<img src="./images/delivery-avtar.jpg" alt="Delivery Person Photo">
+		</div>
+		<div class="profile-info">
+			<h4><%=delivery.getName()%></h4>
+			<p>Delivery Executive</p>
+		</div>
+	</div>
+
+	<!-- Stats Cards -->
+	<div class="stats-section">
+		<div class="stat-card assigned" onclick="location.href='assigned-orders.jsp'">
+			<div class="icon"><i class="bi bi-box"></i></div>
+			<h5>Assigned</h5>
+			<h2><%=request.getAttribute("assignedCount") != null ? request.getAttribute("assignedCount") : 0%></h2>
+		</div>
+		<div class="stat-card completed" onclick="location.href='delivery-history.jsp?filter=completed'">
+			<div class="icon"><i class="bi bi-check-circle"></i></div>
+			<h5>Completed</h5>
+			<h2><%=request.getAttribute("completedCount") != null ? request.getAttribute("completedCount") : 0%></h2>
+		</div>
+		<div class="stat-card pending" onclick="location.href='delivery-history.jsp?filter=pending'">
+			<div class="icon"><i class="bi bi-hourglass-split"></i></div>
+			<h5>Pending</h5>
+			<h2><%=request.getAttribute("pendingCount") != null ? request.getAttribute("pendingCount") : 0%></h2>
+		</div>
+	</div>
+
+	<!-- Recent Assigned Deliveries Table -->
+	<div class="card-table">
+		<h5 class="mb-3">📦 Recent Assigned Deliveries</h5>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover align-middle">
+				<thead>
+					<tr>
+						<th>Order ID</th>
+						<th>Customer</th>
+						<th>Phone</th>
+						<th>Address</th>
+						<th>Products</th>
+						<th>Status</th>
+						<th>Delivery Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+					List deliveries = (List) request.getAttribute("assignedDeliveries");
+					if (deliveries != null && !deliveries.isEmpty()) {
+						for (Object obj : deliveries) {
+							Map d = (Map) obj;
+					%>
+					<tr>
+						<td><%=d.get("order_id")%></td>
+						<td><%=d.get("customer_name")%></td>
+						<td><%=d.get("customer_phone")%></td>
+						<td><%=d.get("address")%></td>
+						<td><%=d.get("products")%></td>
+						<td><span class="badge <%="Delivered".equals(d.get("status")) ? "badge-delivered" : "Pending".equals(d.get("status")) ? "badge-pending" : "badge-delayed"%>"><%=d.get("status")%></span></td>
+						<td><%=d.get("delivery_date")%></td>
+					</tr>
+					<%
+						}
+					} else {
+					%>
+					<tr>
+						<td colspan="7" class="text-center">No assigned deliveries yet 🚚</td>
+					</tr>
+					<%
+					}
+					%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

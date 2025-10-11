@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
@@ -9,7 +10,7 @@
 <%
 DeliveryPersonDao dao = new DeliveryPersonDao();
 List<DeliveryPerson> deliveryPersons = dao.getAllDeliveryPersons();
-
+System.out.println(deliveryPersons.size());
 // Counts
 int totalDelivery = deliveryPersons.size();
 int availableCount = 0;
@@ -43,7 +44,7 @@ body {
 .main-wrapper {
 	margin-top: -69px;
 }
-
+ 
 .sidebar {
 	width: 220px;
 	background: linear-gradient(180deg, #2f71a1, #6ecfde);
