@@ -60,8 +60,8 @@ User user = (User) session.getAttribute("loggedInUser");
 			<%= (joinedDateFormatted.isEmpty() ? "N/A" : joinedDateFormatted) %></p>
 
 		<div class="d-flex justify-content-center gap-3 mt-4">
-			<a href="#" class="btn btn-primary">View Profile</a> <a href="#"
-				class="btn btn-secondary">Settings</a> 	
+			<a href="#" class="btn btn-primary">View Profile</a> 
+			<a href="#" class="btn btn-secondary">Settings</a> 	
 		</div>
 	</div>
 

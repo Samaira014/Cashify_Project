@@ -22,10 +22,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Listings | Seller Dashboard</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+	rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+	rel="stylesheet">
 
 <style>
 body {
@@ -33,7 +38,6 @@ body {
 	background-color: #f7f7fa;
 }
 
-/* Sidebar */
 .sidebar {
 	min-height: 100vh;
 	background-color: #fff;
@@ -63,76 +67,80 @@ body {
 	color: #fff;
 }
 
-/* 🔸 Reuse same animation for table */
-@keyframes fadeInUp {
-	from { opacity: 0; transform: translateY(30px); }
-	to { opacity: 1; transform: translateY(0); }
+@
+keyframes fadeInUp {from { opacity:0;
+	transform: translateY(30px);
 }
 
-/* Product cards */
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+}
 .product-card {
 	background: #fff;
-	border-radius: 15px;
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	padding: 15px;
 	transition: all 0.3s;
-	animation: fadeInUp 0.6s ease forwards;
+	animation: fadeInUp 0.5s forwards;
 }
 
 .product-card:hover {
-	transform: translateY(-8px);
-	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+	transform: translateY(-5px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* 🔸 New: animation for right-side listing table */
-.table-animate {
-	animation: fadeInUp 0.7s ease forwards;
+.product-title {
+	font-weight: 600;
+	font-size: 1rem;
+	margin-bottom: 5px;
+	color: #e22d78;
 }
 
-/* Image styling */
-.product-img {
-	height: 180px;
-	object-fit: contain;
-	border-bottom: 1px solid #eee;
-	padding: 15px;
-}
-
-.product-body {
-	padding: 15px;
+.product-info {
+	font-size: 0.85rem;
+	color: #555;
+	margin-bottom: 4px;
 }
 
 .status-badge {
-	padding: 6px 12px;
-	border-radius: 20px;
-	font-size: 0.85rem;
+	padding: 4px 10px;
+	border-radius: 15px;
+	font-size: 0.75rem;
 	font-weight: 500;
+	display: inline-block;
+	margin-top: 5px;
 }
 
 .bg-pending {
 	background-color: #fff3cd;
 	color: #856404;
 	border: 1px solid #ffeeba;
-	box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-	font-weight: 600;
 }
 
 .bg-verified {
 	background-color: #d4edda;
 	color: #155724;
 	border: 1px solid #c3e6cb;
-	box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-	font-weight: 600;
 }
 
 .bg-rejected {
 	background-color: #f8d7da;
 	color: #721c24;
 	border: 1px solid #f5c6cb;
-	box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-	font-weight: 600;
 }
 
-/* Responsive Grid */
-@media (max-width: 768px) {
+.product-img {
+	width: 100%;
+	height: 150px;
+	object-fit: contain;
+	margin-bottom: 10px;
+	border-radius: 8px;
+}
+
+@media ( max-width : 768px) {
 	.sidebar {
 		display: none;
 	}
@@ -147,65 +155,75 @@ body {
 		<div class="row">
 			<!-- Sidebar -->
 			<div class="col-md-3 sidebar">
-				<a href="seller-home.jsp"><i class="bi bi-house-door"></i> Dashboard</a>
-				<a href="seller-added-items.jsp"><i class="bi bi-plus-circle"></i> Sell a Phone</a>
-				<a href="seller-listing.jsp" class="active"><i class="bi bi-phone"></i> My Listings</a>
-				<a href="seller-sales-report.jsp"><i class="bi bi-bar-chart"></i> Sales Report</a>
-				<a href="seller-settings.jsp"><i class="bi bi-gear"></i> Settings</a>
+				<a href="seller-home.jsp"><i class="bi bi-house-door"></i>
+					Dashboard</a> <a href="seller-added-items.jsp"><i
+					class="bi bi-plus-circle"></i> Sell Item</a> <a
+					href="seller-listing.jsp" class="active"><i class="bi bi-phone"></i>
+					My Listings</a> <a href="seller-sales-report.jsp"><i
+					class="bi bi-bar-chart"></i> Sales Report</a> <a
+					href="seller-settings.jsp"><i class="bi bi-gear"></i> Settings</a>
 			</div>
 
 			<!-- Main Content -->
-			<div class="col-md-9 py-4 table-animate">
-				<h3 class="fw-bold mb-4 text-center text-gradient">📱 My Product Listings</h3>
+			<div class="col-md-9 py-4">
+				<h3 class="fw-bold mb-4 text-center">📱 My Product Listings</h3>
 
 				<% if (productList == null || productList.isEmpty()) { %>
 				<div class="text-center text-muted mt-5">
 					<i class="bi bi-box-seam display-3"></i>
 					<h5 class="mt-3">No listings yet</h5>
-					<p>Add your first phone or gadget to start selling!</p>
-					<a href="seller-added-items.jsp" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Add Product</a>
+					<p>Add your first item to start selling!</p>
+					<a href="seller-added-items.jsp" class="btn btn-primary"><i
+						class="bi bi-plus-circle"></i> Add Product</a>
 				</div>
 				<% } else { %>
-				<div class="row g-4">
-					<% int i = 0;
-					   for (Product p : productList) { 
-					       String delay = String.format("%.1fs", i * 0.1);
-					%>
-					<div class="col-sm-6 col-md-4 col-lg-3" style="animation-delay: <%= delay %>;">
+				<div class="row g-3">
+					<% int i=0; for(Product p: productList){ String delay=String.format("%.1fs", i*0.1); %>
+					<div class="col-sm-6 col-md-4 col-lg-3"
+						style="animation-delay:<%=delay%>;">
 						<div class="product-card">
-							<img
-								src="<%= (p.getImage() != null) ? "data:image/jpeg;base64," + java.util.Base64.getEncoder().encodeToString(p.getImage()) : "https://via.placeholder.com/300x200?text=No+Image" %>"
-								alt="<%= p.getProductName()%>" class="product-img w-100" />
-							<div class="product-body">
-								<h5 class="fw-semibold"><%= p.getBrand() %> <%= p.getProductName()%></h5>
-								<p class="small text-muted mb-1"><%= p.getCategory() %></p>
-								<p class="mb-1">💰 <strong>₹<%= p.getPrice() %></strong></p>
-								
-								<!-- Discounted Price (display only, added by admin) -->
-								<p class="mb-1 text-success">
-									Discounted: 
-									<%= (p.getDiscountedPrice() != null && p.getDiscountedPrice() > 0) ? "₹" + p.getDiscountedPrice() : "Pending" %>
-								</p>
+							<!-- Display uploaded image -->
+							<img class="product-img"
+								src="<%= (p.getImage() != null) ? "data:image/jpeg;base64," + java.util.Base64.getEncoder().encodeToString(p.getImage()) : "https://via.placeholder.com/300x150?text=No+Image" %>"
+								alt="<%= p.getProductName() %>">
 
-								<!-- Status Badge -->
-								<p>
-									<span class="status-badge
-										<%= p.isVerified() ? "bg-verified" :
-											(p.getRejection_msg() != null ? "bg-rejected" : "bg-pending") %>">
-										<%= p.isVerified() ? "Verified" :
-											(p.getRejection_msg() != null ? "Rejected: " + p.getRejection_msg() : "Pending Approval") %>
-									</span>
-								</p>
-
-								<!-- Remove Button -->
-								<form method="post" action="delete-product"
-									onsubmit="return confirm('Are you sure you want to delete this product?');">
-									<input type="hidden" name="productId" value="<%= p.getId() %>">
-									<button type="submit" class="btn btn-danger w-100 mt-2">
-										<i class="bi bi-trash"></i> Remove
-									</button>
-								</form>
-							</div>
+							<div class="product-title">
+								<i class="bi bi-phone"></i>
+								<%= p.getBrand() %>
+								<%= p.getProductName() %></div>
+							<div class="product-info">
+								<i class="bi bi-tags"></i> Category:
+								<%= p.getCategory() %></div>
+							<div class="product-info">
+								<i class="bi bi-cash-stack"></i> Price: ₹<%= p.getPrice() %>
+								| Discount:
+								<%= (p.getDiscountedPrice()!=null && p.getDiscountedPrice()>0)?"₹"+p.getDiscountedPrice():"Pending" %></div>
+							<div class="product-info">
+								<i class="bi bi-memory"></i> RAM:
+								<%= p.getRam() %>
+								| <i class="bi bi-droplet"></i> Color:
+								<%= p.getColor() %></div>
+							<div class="product-info">
+								<i class="bi bi-info-circle"></i> Model:
+								<%= p.getModel() %>
+								| Qty:
+								<%= p.getQuantity() %>
+								| Condition:
+								<%= p.getCondition() %></div>
+							<div class="product-info">
+								<i class="bi bi-card-text"></i>
+								<%= (p.getDescription()!=null)?p.getDescription():"No description" %></div>
+							<span
+								class="status-badge <%= p.isVerified()?"bg-verified":(p.getRejection_msg()!=null?"bg-rejected":"bg-pending") %>">
+								<%= p.isVerified()?"Verified":(p.getRejection_msg()!=null?"Rejected: "+p.getRejection_msg():"Pending Approval") %>
+							</span>
+							<form method="post" action="delete-product"
+								onsubmit="return confirm('Are you sure to delete this product?');">
+								<input type="hidden" name="productId" value="<%= p.getId() %>">
+								<button type="submit" class="btn btn-danger w-100 mt-2">
+									<i class="bi bi-trash"></i> Remove
+								</button>
+							</form>
 						</div>
 					</div>
 					<% i++; } %>
@@ -215,6 +233,7 @@ body {
 		</div>
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

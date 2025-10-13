@@ -47,7 +47,7 @@
 	margin-left: 1rem;
 	transition: all 0.3s ease;
 	flex-shrink: 1;
-    max-width: 280px; 
+	max-width: 280px;
 }
 
 .navbar-search input {
@@ -75,6 +75,40 @@
 	pointer-events: none;
 }
 
+/* Login Dropdown */
+.user-dropdown {
+	color: #fff !important;
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.user-dropdown i {
+	font-size: 1.2rem;
+}
+
+.dropdown-menu a i {
+	margin-right: 8px;
+}
+
+/* Cart Icon */
+.cart-icon {
+	color: #fff;
+	font-size: 1.2rem;
+	margin-left: 1rem;
+	position: relative;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
+}
+
+.cart-icon:hover {
+	color: #ffc107;
+}
+
 /* Buttons */
 .btn-login, .btn-register, .btn-logout {
 	border-radius: 50px;
@@ -83,42 +117,6 @@
 	margin-left: 0.5rem;
 	border: none;
 	transition: all 0.3s ease;
-}
-
-.btn-login {
-	background: #ffc107;
-	color: #000;
-}
-
-.btn-login:hover {
-	background: #fff;
-	color: #6610f2;
-	transform: translateY(-2px);
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.btn-register {
-	background: #28a745;
-	color: #fff;
-}
-
-.btn-register:hover {
-	background: #fff;
-	color: #28a745;
-	transform: translateY(-2px);
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.btn-logout {
-	background: #dc3545;
-	color: #fff;
-}
-
-.btn-logout:hover {
-	background: #fff;
-	color: #dc3545;
-	transform: translateY(-2px);
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .sticky-top {
@@ -166,8 +164,11 @@
 </head>
 
 <%
-    String adminSession = (String) session.getAttribute("adminSession");
-    String userSession = (String) session.getAttribute("userSession");
+String adminSession = (String) session.getAttribute("adminSession");
+String userSession = (String) session.getAttribute("userSession");
+String loggedInUserName = (String) session.getAttribute("name");
+
+
 %>
 
 <body>
@@ -181,60 +182,113 @@
 			<ul class="navbar-nav me-2 mb-2 mb-lg-0 d-none d-lg-flex">
 				<li class="nav-item"><a class="nav-link" href="home.jsp">Home</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#" id="servicesDropdown"
+					role="button" data-bs-toggle="dropdown" aria-expanded="false">Services</a>
 					<ul class="dropdown-menu" aria-labelledby="servicesDropdown">
 						<li><a class="dropdown-item" href="#">Loan Plans</a></li>
 						<li><a class="dropdown-item" href="#">Investment</a></li>
 						<li><hr class="dropdown-divider"></li>
 						<li><a class="dropdown-item" href="#">Consulting</a></li>
-					</ul>
-				</li>
+					</ul></li>
 			</ul>
 
 			<!-- Search bar -->
 			<form class="navbar-search" action="search.jsp" method="get">
-				<i class="fa-solid fa-magnifying-glass"></i>
-				<input type="text" name="query" placeholder="Search..." required>
+				<i class="fa-solid fa-magnifying-glass"></i> <input type="text"
+					name="query" placeholder="Search..." required>
 			</form>
 
-			<!-- Login/Register or Logout -->
-			<div class="d-flex ms-auto d-none d-lg-flex">
-				<%
-					if (adminSession != null || userSession != null) {
-				%>
-					<a href="user-logout" class="btn btn-logout">Logout</a>
-				<%
-					} else {
-				%>
-					<a href="login.jsp" class="btn btn-login">Login</a>
-					<a href="registration.jsp" class="btn btn-register">Register</a>
-				<%
-					}
-				%>
+			<!-- Right Side: Login Dropdown + Cart -->
+			<div class="d-flex align-items-center ms-auto d-none d-lg-flex">
+
+				<!-- Login Dropdown (button trigger for reliability) -->
+				<div class="dropdown">
+					<button class="btn btn-transparent user-dropdown dropdown-toggle"
+						type="button" id="userDropdownBtn" data-bs-toggle="dropdown"
+						aria-expanded="false">
+						<i class="fa-regular fa-user"></i> 
+						<span> 
+						<%= (loggedInUserName != null) ? loggedInUserName : "Login" %>
+						</span>
+					</button>
+
+					<ul class="dropdown-menu dropdown-menu-end"
+						aria-labelledby="userDropdownBtn">
+						<%
+						if (adminSession != null || userSession != null) {
+						%>
+						<li><a class="dropdown-item" href="user-profile.jsp"><i
+								class="fa-solid fa-user me-2"></i> My Profile</a></li>
+						<li><a class="dropdown-item" href="wishlist.jsp"><i
+								class="fa-solid fa-heart me-2"></i> Wishlist</a></li>
+						<li><a class="dropdown-item" href="orders.jsp"><i
+								class="fa-solid fa-box me-2"></i> My Orders</a></li>
+						<li><hr class="dropdown-divider"></li>
+						<li><a class="dropdown-item text-danger" href="logout"><i
+								class="fa-solid fa-right-from-bracket me-2"></i> Logout</a></li>
+						<%
+						} else {
+						%>
+						<li><a class="dropdown-item" href="login.jsp"><i
+								class="fa-solid fa-right-to-bracket me-2"></i> Login</a></li>
+						<li><a class="dropdown-item" href="registration.jsp"><i
+								class="fa-solid fa-user-plus me-2"></i> Signup</a></li>
+						<%
+						}
+						%>
+					</ul>
+				</div>
+
+				<!-- Cart Icon -->
+				<a href="cart.jsp" class="cart-icon ms-3"> <i
+					class="fa-solid fa-cart-shopping"></i> <span>Cart</span>
+				</a>
+
 			</div>
+
 		</div>
 	</nav>
 
 	<!-- Bottom Navbar for mobile -->
 	<div class="mobile-nav d-lg-none">
-		<a href="#"><i class="fa-solid fa-house"></i>Home</a>
-		<a href="#"><i class="fa-solid fa-gear"></i>Features</a>
-		<a href="#"><i class="fa-solid fa-hand-holding-dollar"></i>Services</a>
+		<a href="home.jsp"><i class="fa-solid fa-house"></i>Home</a> <a
+			href="#"><i class="fa-solid fa-gear"></i>Features</a> <a href="#"><i
+			class="fa-solid fa-hand-holding-dollar"></i>Services</a> <a
+			href="cart.jsp"><i class="fa-solid fa-cart-shopping"></i>Cart</a>
 		<%
-			if (adminSession != null || userSession != null) {
+		if (adminSession != null || userSession != null) {
 		%>
-			<a href="user-logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+		<a href="logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
 		<%
-			} else {
+		} else {
 		%>
-			<a href="login.jsp"><i class="fa-solid fa-right-to-bracket"></i>Login</a>
-			<a href="registration.jsp"><i class="fa-solid fa-user-plus"></i>Register</a>
+		<a href="login.jsp"><i class="fa-solid fa-right-to-bracket"></i>Login</a>
 		<%
-			}
+		}
 		%>
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Bootstrap JS (must be the bundle) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-q2Dy+6k1+Up+jeEoQjBo3q8CNcMgcL0B9jpbGoxb8VvE8wH/vb5I9f6K4oF3xrBE"
+crossorigin="anonymous"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // confirm Bootstrap loaded
+  if (!window.bootstrap || !bootstrap.Dropdown) {
+    console.error("Bootstrap JS not loaded!");
+    return;
+  }
+  console.log("Bootstrap loaded ✅");
+
+  // manually init all dropdowns
+  document.querySelectorAll('.dropdown-toggle').forEach(el => {
+    new bootstrap.Dropdown(el);
+  });
+});
+</script>
+
 </body>
 </html>

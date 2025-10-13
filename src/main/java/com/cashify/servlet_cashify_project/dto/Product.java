@@ -15,7 +15,10 @@ public class Product {
 	private String productName;
 	private String brand;
 	private String category;
+	private String model;
 	private double price;
+	private String color;
+	private int ram;
 	private String condition;
 	private int quantity;
 	private String description;

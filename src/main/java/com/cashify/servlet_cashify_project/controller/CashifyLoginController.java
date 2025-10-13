@@ -77,19 +77,19 @@ public class CashifyLoginController extends HttpServlet {
 
 			if (user != null && user.getPassword().equals(password)) {
 
-				httpSession.setAttribute("userSession", email);
+			    HttpSession httpSessions = req.getSession();
+			    httpSession.setAttribute("userSession", email);
+			    httpSession.setAttribute("name", user.getName()); // ✅ Add this line
 
-				System.out.println("user-logged in successfully");
-
-				req.getRequestDispatcher("user-home.jsp").forward(req, resp);
+			    System.out.println("User logged in successfully: " + user.getName());
+			    req.getRequestDispatcher("home.jsp").forward(req, resp);
 
 			} else {
-
-				System.out.println("check with user credentials!!!!");
-
-				req.setAttribute("msg", "please check with your credentials");
-				req.getRequestDispatcher("login.jsp").forward(req, resp);
+			    System.out.println("Invalid credentials!");
+			    req.setAttribute("msg", "Please check your credentials");
+			    req.getRequestDispatcher("login.jsp").forward(req, resp);
 			}
+
 		}
 	}
 }

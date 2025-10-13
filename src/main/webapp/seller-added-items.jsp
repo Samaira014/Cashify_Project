@@ -176,6 +176,35 @@ input[list]:hover {
                         <input type="text" class="form-control" id="brand" name="brand" placeholder="Enter brand" required>
                     </div>
                     <div class="col-md-6">
+                        <label for="model" class="form-label">Model</label>
+                        <input type="text" class="form-control" id="model" name="model" placeholder="Enter model" required>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="ram" class="form-label">RAM</label>
+                        <input type="text" class="form-control" id="ram" name="ram" placeholder="Enter ram" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="color" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="model" name="color" placeholder="Enter color" required>
+                    </div> 
+                  </div>  
+
+                <div class="row g-3">
+                	<div class="col-md-6">
+                        <label for="brand" class="form-label">Quantity</label>
+                        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="price" class="form-label">Price (₹)</label>
+                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                <div class="col-md-6">
                         <label for="condition" class="form-label">Condition</label>
                         <select class="form-select" id="condition" name="condition" required>
                             <option value="" selected disabled>Select condition</option>
@@ -184,25 +213,10 @@ input[list]:hover {
                             <option value="Refurbished">Refurbished</option>
                         </select>
                     </div>
-                </div>
-                
-
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="price" class="form-label">Price (₹)</label>
-                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
-                    </div>
                     <div class="col-md-6">
                         <label for="image" class="form-label">Upload Image</label>
                         <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
                         <img id="imagePreview" src="#" alt="Image Preview">
-                    </div>
-                </div>
-                
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="brand" class="form-label">Quantity</label>
-                        <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Enter quantity" required>
                     </div>
                 </div> 
 
