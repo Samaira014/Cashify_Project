@@ -1,47 +1,39 @@
 package com.cashify.servlet_cashify_project.controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.cashify.servlet_cashify_project.dao.ProductDao;
+import com.cashify.servlet_cashify_project.connection.CashifyConnection;
+
 
 @WebServlet("/AdminVerifyProductController")
 public class AdminVerifyProductController extends HttpServlet {
 
-    private ProductDao productDao = new ProductDao();
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int productId = Integer.parseInt(request.getParameter("productId"));
 
-        // Get the 'id' parameter from the request
-        String idStr = request.getParameter("id");
+        try (Connection con = CashifyConnection.getCashifyConnection()) {
+            String sql = "UPDATE product SET verified = TRUE, rejection_msg = NULL WHERE id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, productId);
+            int rows = ps.executeUpdate();
 
-        // Check if the parameter is missing or empty
-        if (idStr == null || idStr.trim().isEmpty() || idStr.equals("undefined")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product ID is missing or invalid");
-            return;
-        }
-
-        try {
-            int productId = Integer.parseInt(idStr);
-
-            // Call your DAO method to verify the product
-            boolean success = productDao.verifyProduct(productId);
-
-            if (success) {
-                response.getWriter().write("Product verified successfully!");
+            if (rows > 0) {
+                response.setStatus(HttpServletResponse.SC_OK);
             } else {
-                response.getWriter().write("Failed to verify product. Maybe the ID is invalid?");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             }
-
-        } catch (NumberFormatException e) {
-            // Handle the case where the parameter is not a number
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product ID must be a valid number");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

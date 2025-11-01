@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
+
 public class CartItems {
 
 	private int itemsid;
@@ -13,5 +14,6 @@ public class CartItems {
 	private int quantity;
 	private double price;
 	private LocalDateTime datetimes;
+	
 	
 }

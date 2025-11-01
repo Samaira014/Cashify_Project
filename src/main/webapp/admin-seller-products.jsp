@@ -198,7 +198,7 @@ body {
               <td data-label="Price">₹<%= p.getPrice() %></td>
               <td data-label="Discounted">
                 <form action="UpdateDiscountServlet" method="post" class="d-flex">
-                  <input type="hidden" name="productId" value="<%= p.getId() %>">
+                  <input type="hidden" name="ProductName" value="<%= p.getProductName() %>">
                   <input type="number" name="discountedPrice" class="form-control form-control-sm me-2" 
                          value="<%= (p.getDiscountedPrice() != null) ? p.getDiscountedPrice() : "" %>" placeholder="₹" step="0.01">
                   <button type="submit" class="btn btn-sm btn-primary">Save</button>
@@ -214,12 +214,12 @@ body {
               <td data-label="Actions">
                 <% if (!p.isVerified()) { %>
                   <form action="VerifyProductServlet" method="post" class="d-inline me-1">
-                    <input type="hidden" name="productId" value="<%= p.getId() %>">
+                    <input type="hidden" name="productName" value="<%= p.getProductName() %>">
                     <button type="submit" class="btn btn-sm btn-verify"><i class="bi bi-check-circle"></i></button>
                   </form>
                 <% } else { %>
                   <form action="UnverifyProductServlet" method="post" class="d-inline">
-                    <input type="hidden" name="productId" value="<%= p.getId() %>">
+                    <input type="hidden" name="ProductName" value="<%= p.getProductName() %>">
                     <button type="submit" class="btn btn-sm btn-unverify"><i class="bi bi-x-circle"></i></button>
                   </form>
                 <% } %>

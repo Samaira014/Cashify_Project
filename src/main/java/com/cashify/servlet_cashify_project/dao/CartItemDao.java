@@ -63,18 +63,18 @@ public class CartItemDao {
 
 		try {
 			PreparedStatement ps = connection.prepareStatement(getProductItemFromCartQuery);
-			
+
 			ps.setInt(1, userId);
-			
-			ResultSet resultSet=ps.executeQuery();
-			
-			if(resultSet.next()) {
-				
-				Cart cart=new Cart();
+
+			ResultSet resultSet = ps.executeQuery();
+
+			if (resultSet.next()) {
+
+				Cart cart = new Cart();
 				cart.setId(resultSet.getInt("id"));
 				cart.setUserId(resultSet.getInt("userid"));
 				cart.setStatus(resultSet.getString("status"));
-				
+
 				return cart;
 			}
 			return null;
@@ -83,30 +83,29 @@ public class CartItemDao {
 			return null;
 		}
 	}
-	
+
 	public List<CartItems> getAllCartItemsDetails() {
 
 		String getProductItemFromCartQuery = "select * from cart_items";
 
 		List<CartItems> cartItems = new ArrayList<CartItems>();
-		
+
 		try {
 			PreparedStatement ps = connection.prepareStatement(getProductItemFromCartQuery);
-			
-			ResultSet resultSet=ps.executeQuery();
-			
-			while(resultSet.next()) {
-				
+
+			ResultSet resultSet = ps.executeQuery();
+
+			while (resultSet.next()) {
+
 				CartItems cartItem = new CartItems();
-				
+
 				cartItem.setItemsid(resultSet.getInt("id"));
 				cartItem.setCartid(resultSet.getInt("cartid"));
 				cartItem.setPrice(resultSet.getDouble("price"));
 				cartItem.setProductid(resultSet.getInt("productid"));
 				cartItem.setQuantity(resultSet.getInt("quantity"));
-				//cartItem.setDatetimes(resultSet.getObject(""));
-				
-				
+				// cartItem.setDatetimes(resultSet.getObject(""));
+
 				cartItems.add(cartItem);
 			}
 			return cartItems;
@@ -115,20 +114,81 @@ public class CartItemDao {
 			return null;
 		}
 	}
-	
+
 	public boolean updateCartItemsQuantityAndPriceDao(int quantity, double price, int itemsId) {
-		
+
 		try {
-			String updateQuery = "update cart_items set quantity=?, price=? where id = ?";
-			
+
+			String updateQuery = "update cart_items set quantity=?, price=? where id=?";
+
 			PreparedStatement ps = connection.prepareStatement(updateQuery);
-			
+
 			ps.setInt(1, quantity);
 			ps.setDouble(2, price);
 			ps.setInt(3, itemsId);
-			
+
+			return ps.executeUpdate() > 0 ? true : false;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public CartItems getCartItemsByItemsIdDao(int cartItemsId) {
+		try {
+
+			String cartItemInsertQuery = "select * from cart_items where id=?";
+
+			PreparedStatement ps = connection.prepareStatement(cartItemInsertQuery);
+
+			ps.setInt(1, cartItemsId);
+
+			ResultSet set = ps.executeQuery();
+
+			if (set.next()) {
+
+				CartItems cartItems = new CartItems();
+				cartItems.setCartid(set.getInt("cartid"));
+				cartItems.setItemsid(set.getInt("id"));
+				cartItems.setPrice(set.getDouble("price"));
+				cartItems.setQuantity(set.getInt("quantity"));
+				cartItems.setProductid(set.getInt("productid"));
+
+				return cartItems;
+			}
+
+			return null;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<CartItems> getCartItemsByCartId(int cartId) {
+		
+		List<CartItems> cartItems = new ArrayList<>();
+		
+		try (Connection con = CashifyConnection.getCashifyConnection();
+				PreparedStatement ps = con.prepareStatement("SELECT * FROM cart_items WHERE cartid = ?")) {
+
+			ps.setInt(1, cartId);
+			ResultSet resultSet = ps.executeQuery();
+
+			while (resultSet.next()) {
+				CartItems cartItem = new CartItems();
+
+				cartItem.setItemsid(resultSet.getInt("id"));
+				cartItem.setCartid(resultSet.getInt("cartid"));
+				cartItem.setPrice(resultSet.getDouble("price"));
+				cartItem.setProductid(resultSet.getInt("productid"));
+				cartItem.setQuantity(resultSet.getInt("quantity"));
+				cartItems.add(cartItem);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return cartItems;
 	}
 }

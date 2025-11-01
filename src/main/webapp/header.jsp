@@ -222,7 +222,7 @@ String loggedInUserName = (String) session.getAttribute("name");
 								class="fa-solid fa-user me-2"></i> My Profile</a></li>
 						<li><a class="dropdown-item" href="wishlist.jsp"><i
 								class="fa-solid fa-heart me-2"></i> Wishlist</a></li>
-						<li><a class="dropdown-item" href="orders.jsp"><i
+						<li><a class="dropdown-item" href="my-orders.jsp"><i
 								class="fa-solid fa-box me-2"></i> My Orders</a></li>
 						<li><hr class="dropdown-divider"></li>
 						<li><a class="dropdown-item text-danger" href="logout"><i

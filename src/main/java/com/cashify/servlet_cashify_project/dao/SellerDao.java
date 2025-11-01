@@ -54,13 +54,14 @@ public class SellerDao {
 
     //Get seller by ID
     public Seller getSellerById(int id) {
+    	Seller seller = null;
         String query = "SELECT * FROM seller WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Seller seller = new Seller();
+                seller = new Seller();
                 seller.setId(rs.getInt("id"));
                 seller.setName(rs.getString("name"));
                 seller.setEmail(rs.getString("email"));
@@ -70,7 +71,7 @@ public class SellerDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return seller;
     }
 
     //Get all sellers
@@ -127,7 +128,7 @@ public class SellerDao {
     public int getTotalSellers() {
         int total = 0;
         try {
-            String sql = "SELECT COUNT(*) AS total FROM sellers";
+            String sql = "SELECT COUNT(*) AS total FROM seller";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -139,3 +140,4 @@ public class SellerDao {
         return total;
     }
 }
+

@@ -20,7 +20,8 @@ import jakarta.servlet.http.Part;
 @MultipartConfig
 public class SellerAddedItemController extends HttpServlet {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
         try {
             Seller seller = (Seller) session.getAttribute("seller");
@@ -33,10 +34,15 @@ public class SellerAddedItemController extends HttpServlet {
             String productName = request.getParameter("itemName");
             String brand = request.getParameter("brand");
             String category = request.getParameter("category");
+            String model = request.getParameter("model");
+            String color = request.getParameter("color");
+            int ram = Integer.parseInt(request.getParameter("ram"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
             double price = Double.parseDouble(request.getParameter("price"));
             String condition = request.getParameter("condition");
             String description = request.getParameter("description");
 
+            // Handle image
             Part part = request.getPart("image");
             InputStream is = part.getInputStream();
             byte[] imageBytes = is.readAllBytes();
@@ -47,6 +53,10 @@ public class SellerAddedItemController extends HttpServlet {
             p.setProductName(productName);
             p.setBrand(brand);
             p.setCategory(category);
+            p.setModel(model);
+            p.setColor(color);
+            p.setRam(ram);
+            p.setQuantity(quantity);
             p.setPrice(price);
             p.setCondition(condition);
             p.setDescription(description);
@@ -54,26 +64,21 @@ public class SellerAddedItemController extends HttpServlet {
 
             // Save product using DAO
             ProductDao dao = new ProductDao();
-            boolean isAdded = dao.addProduct(p); // your DAO method to insert product into DB
+            boolean isAdded = dao.addProduct(p);
 
             if (isAdded) {
                 session.setAttribute("successMsg", "Product added successfully!");
+                response.sendRedirect("seller-listing.jsp");
             } else {
                 session.setAttribute("errorMsg", "Something went wrong while adding the product!");
+                response.sendRedirect("seller-added-items.jsp");
             }
-
-            response.sendRedirect("seller-listing.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
-            
-            try {
-				response.sendRedirect("seller-added-items.jsp");
-			} catch (IOException e1) {
-				
-				e1.printStackTrace();
-				session.setAttribute("errorMsg", "Internal server error: " + e.getMessage());
-			}
+            HttpSession session2 = request.getSession();
+            session2.setAttribute("errorMsg", "Internal server error: " + e.getMessage());
+            response.sendRedirect("seller-added-items.jsp");
         }
     }
 }
