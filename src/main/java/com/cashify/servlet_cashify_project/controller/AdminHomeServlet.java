@@ -97,6 +97,12 @@ public class AdminHomeServlet extends HttpServlet {
             request.setAttribute("users", users);
             request.setAttribute("sellers", sellers);
             request.setAttribute("deliverypersons", delivery);
+            
+            // ✅ ADD THESE 3 LINES to show totals in your JSP
+            request.setAttribute("totalUsers", users.size());
+            request.setAttribute("totalSellers", sellers.size());
+            request.setAttribute("totalDelivery", delivery.size());
+
 
             // ===== Forward to JSP =====
             RequestDispatcher rd = request.getRequestDispatcher("/admin-home.jsp");

@@ -1,8 +1,30 @@
+<%@page import="com.cashify.servlet_cashify_project.dto.DeliveryPerson"%>
+<%@page
+	import="com.cashify.servlet_cashify_project.dao.DeliveryPersonDao"%>
+<%@page import="com.cashify.servlet_cashify_project.dto.Seller"%>
+<%@page import="com.cashify.servlet_cashify_project.dao.SellerDao"%>
+<%@page import="com.cashify.servlet_cashify_project.dto.User"%>
+<%@page import="com.cashify.servlet_cashify_project.dao.UserDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="com.cashify.servlet_cashify_project.dto.Admin"%>
+
+<%
+UserDao userDao = new UserDao();
+List<User> allUsers = userDao.getAllUsers();
+int totalUsers = userDao.getTotalUsers();
+
+SellerDao sellerDao = new SellerDao();
+List<Seller> allSellers = sellerDao.getAllSellers();
+int totalSellers = (allSellers != null) ? allSellers.size() : 0;
+
+DeliveryPersonDao dao = new DeliveryPersonDao();
+List<DeliveryPerson> allDeliveryPersons = dao.getAllDeliveryPersons();
+int totalDelivery = allDeliveryPersons.size();
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,14 +37,15 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
+/* your existing CSS (unchanged) */
 .main-wrapper {
 	margin-top: -69px;
 }
-/* Fixed navbar height */
+
 .navbar-space {
 	height: 65px;
 }
-/* Sidebar */
+
 .sidebar {
 	width: 220px;
 	background: linear-gradient(180deg, #2f71a1, #6ecfde);
@@ -55,13 +78,13 @@
 	border-left: 4px solid #fff;
 	font-weight: 600;
 }
-/* Content */
+
 .content {
 	margin-left: 220px;
 	padding: 20px;
 	margin-top: 65px;
 }
-/* Stats Cards */
+
 .stats {
 	display: flex;
 	gap: 20px;
@@ -104,7 +127,7 @@
 .bg-delivery {
 	background: linear-gradient(135deg, #1fa2ff, #12d8fa);
 }
-/* Table Styling */
+
 .table-container {
 	background: white;
 	border-radius: 12px;
@@ -128,7 +151,7 @@
 	transform: scale(1.1);
 	transition: transform 0.3s;
 }
-/* Admin Info Card */
+
 .admin-card {
 	display: flex;
 	align-items: center;
@@ -156,7 +179,7 @@
 	margin: 0;
 	color: #555;
 }
-/* Responsive */
+
 @media ( max-width : 768px) {
 	.content {
 		margin-left: 0;
@@ -174,34 +197,29 @@
 	}
 }
 </style>
-
 </head>
 <body>
 
-	<!-- Include Navbar -->
 	<jsp:include page="admin-navbar.jsp"></jsp:include>
 
-	<!-- Main Wrapper -->
 	<div class="main-wrapper">
-
-		<!-- Sidebar -->
 		<div class="sidebar">
-		<h5 class="text-center mb-3">Admin Panel</h5>
-			<a href="#" class="active" onclick="showSection('dashboard', this)"><i class="bi bi-house-door-fill"></i> Dashboard</a> 
-			<a href="admin-user.jsp" onclick="showSection('users', this)"><i class="bi bi-people-fill"></i> Users</a> 
-			<a href="admin-seller.jsp" onclick="showSection('sellers', this)"><i class="bi bi-shop"></i>Sellers</a>
-			<a href="admin-delivery.jsp" onclick="showSection('delivery', this)"><i class="bi bi-truck"></i> Delivery Persons</a>
-
+			<h5 class="text-center mb-3">Admin Panel</h5>
+			<a href="#" class="active" onclick="showSection('dashboard', this)"><i
+				class="bi bi-house-door-fill"></i> Dashboard</a> <a
+				href="admin-user.jsp" onclick="showSection('users', this)"><i
+				class="bi bi-people-fill"></i> Users</a> <a href="admin-seller.jsp"
+				onclick="showSection('sellers', this)"><i class="bi bi-shop"></i>Sellers</a>
+			<a href="admin-delivery.jsp" onclick="showSection('delivery', this)"><i
+				class="bi bi-truck"></i> Delivery Persons</a>
 		</div>
 
-		<!-- Content -->
 		<div class="content">
-
-			<!-- Admin Info Card -->
 			<%
 			Admin admin = (Admin) request.getAttribute("admin");
 			String adminName = (admin != null && admin.getName() != null) ? admin.getName() : "Admin";
 			%>
+
 			<div class="admin-card">
 				<img src="./images/avtar.jpg" alt="Admin Photo">
 				<div>
@@ -212,19 +230,20 @@
 
 			<!-- Stats Cards -->
 			<div class="stats">
-				<div class="card-stats bg-users">
+				<div class="card-stats bg-users" onclick="showSection('users', this)">
 					<h5>Total Users</h5>
-					<h3><%=request.getAttribute("totalUsers") != null ? request.getAttribute("totalUsers") : 0%></h3>
+					<h3><%=totalUsers%></h3>
 					<i class="fas fa-users"></i>
 				</div>
-				<div class="card-stats bg-sellers">
+				<div class="card-stats bg-sellers"
+					onclick="showSection('sellers', this)">
 					<h5>Total Sellers</h5>
-					<h3><%=request.getAttribute("totalSellers") != null ? request.getAttribute("totalSellers") : 0%></h3>
+					<h3><%=totalSellers%></h3>
 					<i class="fas fa-store"></i>
 				</div>
-				<div class="card-stats bg-delivery">
+				<div class="card-stats bg-delivery" onclick="showSection('delivery', this)">
 					<h5>Delivery Persons</h5>
-					<h3><%=request.getAttribute("totalDelivery") != null ? request.getAttribute("totalDelivery") : 0%></h3>
+					<h3><%=totalDelivery%></h3>
 					<i class="fas fa-truck"></i>
 				</div>
 			</div>
@@ -244,9 +263,9 @@
 					</thead>
 					<tbody>
 						<%
-						List<Map<String, String>> users = (List<Map<String, String>>) request.getAttribute("users");
-						if (users != null && !users.isEmpty()) {
-							for (Map<String, String> u : users) {
+						List<Map<String, String>> usersData = (List<Map<String, String>>) request.getAttribute("users");
+						if (usersData != null && !usersData.isEmpty()) {
+							for (Map<String, String> u : usersData) {
 						%>
 						<tr>
 							<td><%=u.get("id")%></td>
@@ -269,7 +288,6 @@
 					</tbody>
 				</table>
 
-				<!-- User Details -->
 				<div id="userDetails" style="display: none; margin-top: 20px;">
 					<h4>User Orders</h4>
 					<table class="table table-bordered">
@@ -303,9 +321,9 @@
 					</thead>
 					<tbody>
 						<%
-						List<Map<String, String>> sellers = (List<Map<String, String>>) request.getAttribute("sellers");
-						if (sellers != null && !sellers.isEmpty()) {
-							for (Map<String, String> s : sellers) {
+						List<Map<String, String>> sellersData = (List<Map<String, String>>) request.getAttribute("sellers");
+						if (sellersData != null && !sellersData.isEmpty()) {
+							for (Map<String, String> s : sellersData) {
 						%>
 						<tr>
 							<td><%=s.get("id")%></td>
@@ -345,9 +363,9 @@
 					</thead>
 					<tbody>
 						<%
-						List<Map<String, String>> delivery = (List<Map<String, String>>) request.getAttribute("deliverypersons");
-						if (delivery != null && !delivery.isEmpty()) {
-							for (Map<String, String> d : delivery) {
+						List<Map<String, String>> deliveryData = (List<Map<String, String>>) request.getAttribute("deliverypersons");
+						if (deliveryData != null && !deliveryData.isEmpty()) {
+							for (Map<String, String> d : deliveryData) {
 						%>
 						<tr>
 							<td><%=d.get("id")%></td>
@@ -372,18 +390,18 @@
 				</table>
 			</div>
 		</div>
-</div>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-		<script>
-		function showSection(id, element){
-		    document.querySelectorAll('.table-container').forEach(t => t.style.display='none');
-		    document.getElementById(id).style.display='block';
-		    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-		    element.classList.add('active');
-		    if(id !== 'users') document.getElementById('userDetails').style.display='none';
-		}
+	</div>
 
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+function showSection(id, element){
+    document.querySelectorAll('.table-container').forEach(t => t.style.display='none');
+    document.getElementById(id).style.display='block';
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    element.classList.add('active');
+    if(id !== 'users') document.getElementById('userDetails').style.display='none';
+}
 
 function showUserDetails(userId){
     fetch('UserOrdersController?userId='+userId)

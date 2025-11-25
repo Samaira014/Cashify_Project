@@ -10,7 +10,7 @@
 <%
 DeliveryPersonDao dao = new DeliveryPersonDao();
 List<DeliveryPerson> deliveryPersons = dao.getAllDeliveryPersons();
-System.out.println(deliveryPersons.size());
+
 // Counts
 int totalDelivery = deliveryPersons.size();
 int availableCount = 0;

@@ -38,12 +38,7 @@ int totalSoldProducts = (soldProducts != null) ? soldProducts.size() : 0;
 	rel="stylesheet">
 
 <style>
-.actionCell-3{
-    display: flex;
-    margin: auto;
-    gap: 10px;
-    margin-top: 23px;
-}
+
 .image{
 margin: auto; 
 display: flex;
@@ -323,7 +318,7 @@ input.form-control-sm {
                 } else { %> <span class="badge bg-warning text-dark">Pending</span>
 									<% } %>
 								</td>
-								<td id="actionCell-<%=p.getId()%>">
+								<td id="actionCell-<%=p.getId()%>" style="display: flex;  gap: 5px; margin-top: 23px;">
 									<%
                 if(!p.isVerified() && p.getRejection_msg()==null){ %>
                 					<button class="btn btn-sm btn-success w-100"

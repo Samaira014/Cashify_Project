@@ -161,7 +161,7 @@ body {
             <p class="text-muted">You are logged in as a verified seller on Cashify.</p>
             <div class="d-flex justify-content-center gap-3 mt-3">
                 <a href="sell-electronic-items.jsp" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Sell a Phone</a>
-                <a href="my-listings.jsp" class="btn btn-outline-primary btn-hover-gradient"><span><i class="bi bi-list"></i> View My Listings</span></a>
+                <a href="seller-listing.jsp" class="btn btn-outline-primary btn-hover-gradient"><span><i class="bi bi-list"></i> View My Listings</span></a>
             </div>
         </div>
 

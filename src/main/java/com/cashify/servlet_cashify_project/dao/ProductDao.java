@@ -91,40 +91,49 @@ public class ProductDao {
 	}
 
 	// Get all products (for Admin)
-	public List<Product> getAllProducts() {
-		List<Product> list = new ArrayList<>();
-		try {
-			String sql = "SELECT * FROM product";
-			Statement st = connection.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-				Product p = new Product();
-				p.setId(rs.getInt("id"));
-				p.setSellerId(rs.getInt("seller_id"));
-				p.setProductName(rs.getString("productName"));
-				p.setBrand(rs.getString("brand"));
-				p.setCategory(rs.getString("category"));
-				p.setModel(rs.getString("model"));
-				p.setPrice(rs.getDouble("price"));
-				p.setColor(rs.getString("color"));
-				p.setRam(rs.getInt("ram"));
-				p.setCondition(rs.getString("conditions"));
-				p.setQuantity(rs.getInt("quantity"));
-				p.setDescription(rs.getString("descriptions"));
-				p.setImage(rs.getBytes("image"));
-				p.setDiscountedPrice(
-						rs.getObject("discounted_price") != null ? rs.getDouble("discounted_price") : null);
-				p.setRejection_msg(rs.getString("rejection_msg"));
-				p.setRating(rs.getDouble("rating"));
-				p.setVerified(rs.getBoolean("verified"));
-				p.setJoinedDateTime(rs.getTimestamp("joinedDateTime"));
-				list.add(p);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+	public List<Product> getAllProducts(String sort) {
+	    List<Product> list = new ArrayList<>();
+	    String sql = "SELECT * FROM product WHERE verified = true";
+
+	    if ("price_asc".equals(sort))
+	        sql += " ORDER BY COALESCE(discounted_price, price) ASC";
+	    else if ("price_desc".equals(sort))
+	        sql += " ORDER BY COALESCE(discounted_price, price) DESC";
+	    else
+	        sql += " ORDER BY joinedDateTime DESC";
+
+	    try (PreparedStatement ps = connection.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            Product p = new Product();
+	            p.setId(rs.getInt("id"));
+	            p.setSellerId(rs.getInt("seller_id"));
+	            p.setProductName(rs.getString("productName"));
+	            p.setBrand(rs.getString("brand"));
+	            p.setCategory(rs.getString("category"));
+	            p.setModel(rs.getString("model"));
+	            p.setPrice(rs.getDouble("price"));
+	            p.setColor(rs.getString("color"));
+	            p.setRam(rs.getInt("ram"));
+	            p.setCondition(rs.getString("conditions"));
+	            p.setQuantity(rs.getInt("quantity"));
+	            p.setDescription(rs.getString("descriptions"));
+	            p.setImage(rs.getBytes("image"));
+	            p.setDiscountedPrice(rs.getObject("discounted_price") != null 
+	                ? rs.getDouble("discounted_price") : 0.0);
+	            p.setRating(rs.getDouble("rating"));
+	            p.setVerified(rs.getBoolean("verified"));
+	            p.setJoinedDateTime(rs.getTimestamp("joinedDateTime"));
+	            list.add(p);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
 	}
+
 
 	// Update existing product
 	public boolean updateProduct(Product p) {
